@@ -21,24 +21,44 @@ public class Game extends GameActions {
      */
     public Game(Scanner in) {
         this.players = new PlayerList();
+        // store the number of players
+
         this.deck = new Deck();
         this.in = in;
     }
 
     /**
      * Sets up the players that make up the player list.
+     * Refactored already for 2-4 players by Huanmi on Nov 30.
+     * To be updated for 5-8 players in the future.
      */
     public void setPlayers() {
-        System.out.print("Enter player name (empty when done): ");
-        String name = in.nextLine();
-
-        while (!name.isEmpty()) {
-            if (!this.players.addPlayer(name)) {
-                System.out.println("Player is already in the game");
-            }
+        String name;
+        while (true) {
             System.out.print("Enter player name (empty when done): ");
             name = in.nextLine();
+
+            // check if we can progress with empty input
+            if (name.isEmpty() && this.players.getNumPlayers() >= 2) {
+                System.out.println("Players setup already, game should start now!");
+                return;
+            }
+            else if (name.isEmpty() && this.players.getNumPlayers() < 2) {
+                System.out.println("There must be at least 2 players, please add more players!");
+                continue;
+            }
+
+            // valid input
+            if (!this.players.addPlayer(name)) {
+                System.out.println("Player is already in the game");
+                continue;
+            }
+            if (this.players.getNumPlayers() == 4) {
+                System.out.println("There are already 4 players in the game, game should start now!");
+                return;
+            }
         }
+
     }
 
     /**
@@ -46,8 +66,9 @@ public class Game extends GameActions {
      */
     public void start() {
         while (players.getGameWinner() == null) {
-            players.reset();
+            players.reset(); // clear their hands and discards
             setDeck();
+
             players.dealCards(deck);
             while (!players.checkForRoundWinner() && deck.hasMoreCards()) {
                 Player turn = players.getCurrentPlayer();
@@ -85,7 +106,9 @@ public class Game extends GameActions {
             winner.addToken();
             System.out.println(winner.getName() + " has won this round!");
             players.print();
+            // this is the end of a round
         }
+
         Player gameWinner = players.getGameWinner();
         System.out.println(gameWinner + " has won the game and the heart of the princess!");
 
@@ -97,6 +120,8 @@ public class Game extends GameActions {
     private void setDeck() {
         this.deck.build();
         this.deck.shuffle();
+        // remove cards from the deck initially, according to the rule
+        this.deck.removeCards(this.players.getNumPlayers());
     }
 
     /**
