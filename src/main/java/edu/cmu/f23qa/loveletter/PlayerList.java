@@ -157,4 +157,12 @@ public class PlayerList {
         return winner;
     }
 
+    /**
+     * Returns the number of players in the list.
+     * @return the number of players in the list
+     */
+    public int getNumPlayers() {
+        return players.size();
+    }
+
 }
