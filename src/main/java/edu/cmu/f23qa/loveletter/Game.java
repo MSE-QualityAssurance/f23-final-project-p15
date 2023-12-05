@@ -101,7 +101,6 @@ public class Game extends GameActions {
                 winner = players.getRoundWinner();
             } else {
                 winner = players.compareUsedPiles();
-                winner.addToken();
             }
             winner.addToken();
             System.out.println(winner.getName() + " has won this round!");
