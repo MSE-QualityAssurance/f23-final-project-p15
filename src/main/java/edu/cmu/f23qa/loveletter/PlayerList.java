@@ -6,6 +6,8 @@ import java.util.Stack;
 public class PlayerList {
 
     private LinkedList<Player> players;
+    private Player lastRoundWinner = null;
+    private int currentPlayer = 0;
 
     public PlayerList() {
         this.players = new LinkedList<>();
@@ -35,9 +37,9 @@ public class PlayerList {
      * @return the first player in the list
      */
     public Player getCurrentPlayer() {
-        Player current = players.removeFirst();
-        players.addLast(current);
-        return current;
+        int pre = currentPlayer;
+        currentPlayer = (currentPlayer + 1) % players.size();
+        return players.get(pre);
     }
 
     /**
@@ -170,6 +172,8 @@ public class PlayerList {
             }
         }
         winners.push(winner);
+        // get the  winner at the bottom of stack winners
+        this.lastRoundWinner = winners.elementAt(0);
         return winners;
     }
 
@@ -193,6 +197,34 @@ public class PlayerList {
      */
     public int getNumPlayers() {
         return players.size();
+    }
+
+    /**
+     * Get the last round's winner's index in players
+     * @return the winner'index
+     */
+    private int getLastRoundWinner() {
+        Player winner = this.lastRoundWinner;
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i) == winner) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Reset the beginning player at the beginning of a round
+     * @param
+     * @return
+     */
+    public void setBeginner() {
+        if (getLastRoundWinner() != -1) { // there is a winner from last round, starts with him
+            this.currentPlayer = getLastRoundWinner();
+            return;
+        }
+        else
+            return;
     }
 
 }

@@ -71,6 +71,8 @@ public class Game extends GameActions {
             setDeck();
 
             players.dealCards(deck);
+            players.setBeginner();
+            
             while (!players.checkForRoundWinner() && deck.hasMoreCards()) {
                 Player turn = players.getCurrentPlayer();
 
