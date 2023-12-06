@@ -1,6 +1,7 @@
 package edu.cmu.f23qa.loveletter;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class PlayerList {
 
@@ -90,10 +91,12 @@ public class PlayerList {
      *
      * @return the round winner
      */
-    public Player getRoundWinner() {
+    public Stack<Player> getRoundWinner() {
+        Stack<Player> winners = new Stack<>();
         for (Player p : players) {
             if (p.getHand().hasCards()) {
-                return p;
+                winners.push(p);
+                return winners;
             }
         }
         return null;
@@ -145,16 +148,43 @@ public class PlayerList {
     /**
      * Returns the player with the highest used pile value.
      *
-     * @return the player with the highest used pile value
+     * @return the player with the highest used pile value; 
+     *         or null if there is a tie
      */
-    public Player compareUsedPiles() {
+    public Stack<Player> compareUsedPiles() {
         Player winner = players.getFirst();
+        Stack<Player> winners = new Stack<>();
         for (Player p : players) {
             if (p.getDiscarded().value() > winner.getDiscarded().value()) {
+                // add p to the winners
                 winner = p;
             }
+            else if (p.getDiscarded().value() == winner.getDiscarded().value()) {
+                // there's a tie, see if it's a final round
+                // if it is, the game should go on with an extra round
+                if (p.getTokens() == winner.getTokens() && ifFinalRound(p))
+                    return null;
+                // if not, accept multiple winners
+                else 
+                    winners.push(p);
+            }
         }
-        return winner;
+        winners.push(winner);
+        return winners;
+    }
+
+    private boolean ifFinalRound(Player p) {
+        int numPlayers = this.getNumPlayers();
+        if (numPlayers == 2) {
+            return p.getTokens()+1 == 7;
+        }
+        else if (numPlayers == 3) {
+            return p.getTokens()+1 == 5;
+        }
+        else if (numPlayers == 4) {
+            return p.getTokens()+1 == 4;
+        }
+        return false;
     }
 
     /**

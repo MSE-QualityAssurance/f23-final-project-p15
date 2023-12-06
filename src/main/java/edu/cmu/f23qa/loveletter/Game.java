@@ -1,6 +1,7 @@
 package edu.cmu.f23qa.loveletter;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * The main game class. Contains methods for running the game.
@@ -95,22 +96,12 @@ public class Game extends GameActions {
                     }
                 }
             }
-
-            Player winner;
-            if (players.checkForRoundWinner() && players.getRoundWinner() != null) {
-                winner = players.getRoundWinner();
-            } else {
-                winner = players.compareUsedPiles();
-            }
-            winner.addToken();
-            System.out.println(winner.getName() + " has won this round!");
-            players.print();
-            // this is the end of a round
+            checkForRoundWinner();
+            // check if the round end
         }
 
         Player gameWinner = players.getGameWinner();
         System.out.println(gameWinner + " has won the game and the heart of the princess!");
-
     }
 
     /**
@@ -176,5 +167,37 @@ public class Game extends GameActions {
 
         int idx = Integer.parseInt(cardPosition);
         return user.getHand().remove(idx);
+    }
+
+    /** 
+     * Check for winner after a round end
+     * @param user
+     *      the current player
+     * @param opponent
+     * the current opponent
+     */
+    private boolean checkForRoundWinner() {
+        Stack<Player> winners;
+        if (players.checkForRoundWinner() && players.getRoundWinner() != null) {
+            winners = players.getRoundWinner();
+        } 
+        else if (players.compareUsedPiles() != null){ // compare used piles
+            winners = players.compareUsedPiles();
+        }
+        else { // multi winnners after comparing used piles
+            // check if this could be the final round
+            // if it is, the game should go on with an extra round
+            System.out.println("There are multiple winners in the final round, an extra round starts now!");
+            return true;
+        }
+        // travers winner in winners
+        Player winner;
+        while (!winners.isEmpty()) {
+            winner = winners.pop();
+            winner.addToken();
+            System.out.println(winner.getName() + " has won this round!");
+            players.print();
+        }
+        return true;
     }
 }
