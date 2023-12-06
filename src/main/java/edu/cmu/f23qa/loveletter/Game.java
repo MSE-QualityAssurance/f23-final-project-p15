@@ -30,10 +30,7 @@ public class Game extends GameActions {
      */
     public void setPlayers() {
         List<String> playerNames = in.getPlayers(2, 4);
-
-        for (String name : playerNames) {
-            this.players.addPlayer(name);
-        }
+        this.players.addPlayers(playerNames);
     }
 
     /**

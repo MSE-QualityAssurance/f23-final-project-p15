@@ -15,17 +15,6 @@ abstract class GameActions {
      *          the targeted player
      */
     void useGuard(String guessedCard, Player opponent) {
-        // ArrayList<String> cardNames = new ArrayList<>(Arrays.asList(Card.CARD_NAMES));
-
-        // System.out.print("Which card would you like to guess: ");
-        // String cardName = in.nextLine();
-
-        // while (!cardNames.contains(cardName.toLowerCase()) || cardName.equalsIgnoreCase("guard")) {
-        //     System.out.println("Invalid card name");
-        //     System.out.print("Which card would you like to guess: ");
-        //     cardName = in.nextLine();
-        // }
-
         Card opponentCard = opponent.getHand().peek(0);
         if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
             System.out.println("You have guessed correctly!");
@@ -116,37 +105,5 @@ abstract class GameActions {
     void usePrincess(Player user) {
         user.eliminate();
     }
-
-    // /**
-    //  * Useful method for obtaining a chosen target from the player list.
-    //  * @param in
-    //  *          the input stream
-    //  * @param playerList
-    //  *          the list of players
-    //  * @param user
-    //  *          the player choosing an opponent
-    //  * @return the chosen target player
-    //  */
-    // Player getOpponent(Scanner in, PlayerList playerList, Player user) {
-    //     Player opponent = null;
-    //     boolean validTarget = false;
-    //     while (!validTarget) {
-    //         System.out.print("Who would you like to target: ");
-    //         String opponentName = in.nextLine();
-    //         opponent = playerList.getPlayer(opponentName);
-    //         if (opponent == null) {
-    //             System.out.println("This player is not in the game");
-    //         } else if (opponent.isProtected()) {
-    //             System.out.println("This player is protected by a handmaiden");
-    //         } else if (opponent.getName().equals(user.getName())) {
-    //             System.out.println("You cannot target yourself");
-    //         } else if (!opponent.getHand().hasCards()) {
-    //             System.out.println("This player is out of cards");
-    //         } else {
-    //             validTarget = true;
-    //         }
-    //     }
-    //     return opponent;
-    // }
 
 }
