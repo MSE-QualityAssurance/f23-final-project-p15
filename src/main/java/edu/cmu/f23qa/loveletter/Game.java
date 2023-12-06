@@ -34,33 +34,6 @@ public class Game extends GameActions {
         for (String name : playerNames) {
             this.players.addPlayer(name);
         }
-
-        // String name;
-        // while (true) {
-        //     System.out.print("Enter player name (empty when done): ");
-        //     name = in.nextLine();
-
-        //     // check if we can progress with empty input
-        //     if (name.isEmpty() && this.players.getNumPlayers() >= 2) {
-        //         System.out.println("Players setup already, game should start now!");
-        //         return;
-        //     }
-        //     else if (name.isEmpty() && this.players.getNumPlayers() < 2) {
-        //         System.out.println("There must be at least 2 players, please add more players!");
-        //         continue;
-        //     }
-
-        //     // valid input
-        //     if (!this.players.addPlayer(name)) {
-        //         System.out.println("Player is already in the game");
-        //         continue;
-        //     }
-        //     if (this.players.getNumPlayers() == 4) {
-        //         System.out.println("There are already 4 players in the game, game should start now!");
-        //         return;
-        //     }
-        // }
-
     }
 
     /**
@@ -122,6 +95,7 @@ public class Game extends GameActions {
     private void setDeck() {
         this.deck.build();
         this.deck.shuffle();
+        
         // remove cards from the deck initially, according to the rule
         this.deck.removeCards(this.players.getNumPlayers());
     }
@@ -175,28 +149,6 @@ public class Game extends GameActions {
             default:
                 break;
         }
-
-        // if (value < 4 || value == 5 || value == 6) {
-        //     Player opponent = in.getOpponent(players);
-        //     if (value == 1) {
-        //         String guessedCard = in.pickCardWhenGuard();
-        //         useGuard(guessedCard, opponent);
-        //     } else if (value == 2) {
-        //         usePriest(opponent);
-        //     } else if (value == 3) {
-        //         useBaron(user, opponent);
-        //     } else if (value == 5) {
-        //         usePrince(opponent, deck);
-        //     } else if (value == 6) {
-        //         useKing(user, opponent);
-        //     }
-        // } else {
-        //     if (value == 4) {
-        //         useHandmaiden(user);
-        //     } else if (value == 8) {
-        //         usePrincess(user);
-        //     }
-        // }
     }
 
     /**
@@ -210,14 +162,6 @@ public class Game extends GameActions {
     private Card getCard(Player user) {
         user.getHand().print();
         int idx = in.getCard();
-        // System.out.println();
-        // System.out.print("Which card would you like to play (0 for first, 1 for second): ");
-        // String cardPosition = in.nextLine();
-        // while (!cardPosition.equals("0") && !cardPosition.equals("1")) {
-        //     System.out.println("Please enter a valid card position");
-        //     System.out.print("Which card would you like to play (0 for first, 1 for second): ");
-        //     cardPosition = in.nextLine();
-        // }
 
         return user.getHand().remove(idx);
     }

@@ -9,8 +9,13 @@ public class Reader {
         this.in = in;
     }    
 
-    /*
-     * Get players from input
+    /**
+     * Get players from input.
+     * @param minNum 
+     *          The minimum number of players required for the game
+     * @param maxNum
+     *          The maximum number of players allowed for the game
+     * @return A list of player names
      */
     public List<String> getPlayers(int minNum, int maxNum) {
         List<String> playerNames = new ArrayList<>();
@@ -47,8 +52,9 @@ public class Reader {
         }
     }
 
-    /*
+    /**
      * Let player choose the card they want to play from their hand
+     * @return The index of the card the player want to play in his hand
      */
     public int getCard() {
         System.out.println();
@@ -63,8 +69,11 @@ public class Reader {
         return Integer.parseInt(cardPosition);
     }
 
-    /*
+    /**
      * Choose opponent for cards requiring an opponent, allowing to target user itself
+     * @param playerList
+     *          The entire player list
+     * @return The player chosen as opponent
      */
     Player getOpponent(PlayerList playerList) {
         Player opponent = null;
@@ -91,8 +100,13 @@ public class Reader {
         return opponent;
     }
 
-    /*
+    /**
      * Choose opponent for cards requiring an opponent, disallowing to target player itself
+     * @param playerList
+     *          The entire player list
+     * @param user
+     *          The player who is choosing the opponent
+     * @return The player chosen as opponent
      */
     Player getOpponentNotSelf(PlayerList playerList, Player user) {
         Player opponent = getOpponent(playerList);
@@ -105,8 +119,9 @@ public class Reader {
         return opponent;
     }
 
-    /*
+    /**
      * Pick the card players want to guess when they use the "Guard" card
+     * @return The card the player wants to guess
      */
     String pickCardWhenGuard() {
         ArrayList<String> cardNames = new ArrayList<>(Arrays.asList(Card.CARD_NAMES));
