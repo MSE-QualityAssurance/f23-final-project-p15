@@ -10,14 +10,12 @@ public class PlayerList {
 
     public PlayerList() {
         this.players = new LinkedList<>();
-        this.tokensToWin = getTokensToWin();
     }
 
     /**
      * Set the number of tokens to win the game
-     * @return the number of tokens to win the game
      */
-    private int getTokensToWin() {
+    public void setTokensToWin() {
         Map<Integer, Integer> playerNumToToken = new HashMap<>();
         playerNumToToken.put(2, 7);
         playerNumToToken.put(3, 5);
@@ -25,7 +23,7 @@ public class PlayerList {
 
         int numPlayers = this.players.size();
 
-        return playerNumToToken.getOrDefault(numPlayers, 0);
+        this.tokensToWin = playerNumToToken.getOrDefault(numPlayers, 0);
     }
 
     /**

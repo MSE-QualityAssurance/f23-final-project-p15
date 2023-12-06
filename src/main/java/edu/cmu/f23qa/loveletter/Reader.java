@@ -31,7 +31,7 @@ public class Reader {
                     System.out.println("Players setup already, game should start now!");
                     return playerNames;
                 } else if (playerNames.size() < minNum) {
-                    System.out.println("There must be at least 2 players, please add more players!");
+                    System.out.printf("There must be at least %d players, please add more players!", minNum);
                     continue;
                 }
             }
@@ -46,7 +46,7 @@ public class Reader {
 
             // Start the game immediately when the number of players reach maximum
             if (playerNames.size() == maxNum) {
-                System.out.println("There are already 4 players in the game, game should start now!");
+                System.out.printf("There are already %d players in the game, game should start now!", maxNum);
                 return playerNames;
             }
         }

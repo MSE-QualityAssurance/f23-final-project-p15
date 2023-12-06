@@ -32,6 +32,7 @@ public class Game extends GameActions {
     public void setPlayers() {
         List<String> playerNames = in.getPlayers(2, 4);
         this.players.addPlayers(playerNames);
+        this.players.setTokensToWin();
     }
 
     /**
