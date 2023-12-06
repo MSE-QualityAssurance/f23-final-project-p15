@@ -1,6 +1,6 @@
 package edu.cmu.f23qa.loveletter;
 
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * The main game class. Contains methods for running the game.
@@ -12,53 +12,25 @@ public class Game extends GameActions {
     /**
      * The input stream.
      */
-    private Scanner in;
+    private Reader in;
 
     /**
      * Public constructor for a Game object.
      * @param in
      *          the input stream
      */
-    public Game(Scanner in) {
+    public Game(Reader in) {
         this.players = new PlayerList();
-        // store the number of players
-
         this.deck = new Deck();
         this.in = in;
     }
 
     /**
      * Sets up the players that make up the player list.
-     * Refactored already for 2-4 players by Huanmi on Nov 30.
-     * To be updated for 5-8 players in the future.
      */
     public void setPlayers() {
-        String name;
-        while (true) {
-            System.out.print("Enter player name (empty when done): ");
-            name = in.nextLine();
-
-            // check if we can progress with empty input
-            if (name.isEmpty() && this.players.getNumPlayers() >= 2) {
-                System.out.println("Players setup already, game should start now!");
-                return;
-            }
-            else if (name.isEmpty() && this.players.getNumPlayers() < 2) {
-                System.out.println("There must be at least 2 players, please add more players!");
-                continue;
-            }
-
-            // valid input
-            if (!this.players.addPlayer(name)) {
-                System.out.println("Player is already in the game");
-                continue;
-            }
-            if (this.players.getNumPlayers() == 4) {
-                System.out.println("There are already 4 players in the game, game should start now!");
-                return;
-            }
-        }
-
+        List<String> playerNames = in.getPlayers(2, 4);
+        this.players.addPlayers(playerNames);
     }
 
     /**
@@ -120,6 +92,7 @@ public class Game extends GameActions {
     private void setDeck() {
         this.deck.build();
         this.deck.shuffle();
+        
         // remove cards from the deck initially, according to the rule
         this.deck.removeCards(this.players.getNumPlayers());
     }
@@ -134,25 +107,44 @@ public class Game extends GameActions {
     private void playCard(Card card, Player user) {
         int value = card.value();
         user.getDiscarded().add(card);
-        if (value < 4 || value == 5 || value == 6) {
-            Player opponent = getOpponent(in, players, user);
-            if (value == 1) {
-                useGuard(in, opponent);
-            } else if (value == 2) {
+
+        // Get opponent
+        List<Integer> needOpponent = Arrays.asList(1, 2, 3, 5, 6);
+        Player opponent = null;
+        if (needOpponent.contains(value)) {
+            if (value == 5) {
+                opponent = in.getOpponent(players);
+            } else {
+                opponent = in.getOpponentNotSelf(players, user);
+            }
+        } 
+
+        // Handlers
+        switch (value) {
+            case 1:
+                String guessedCard = in.pickCardWhenGuard();
+                useGuard(guessedCard, opponent);
+                break;
+            case 2:
                 usePriest(opponent);
-            } else if (value == 3) {
+                break;
+            case 3:
                 useBaron(user, opponent);
-            } else if (value == 5) {
-                usePrince(opponent, deck);
-            } else if (value == 6) {
-                useKing(user, opponent);
-            }
-        } else {
-            if (value == 4) {
+                break;
+            case 4:
                 useHandmaiden(user);
-            } else if (value == 8) {
+                break;
+            case 5:
+                usePrince(opponent, deck);
+                break;
+            case 6:
+                useKing(user, opponent);
+                break;
+            case 8:
                 usePrincess(user);
-            }
+                break;
+            default:
+                break;
         }
     }
 
@@ -166,16 +158,8 @@ public class Game extends GameActions {
      */
     private Card getCard(Player user) {
         user.getHand().print();
-        System.out.println();
-        System.out.print("Which card would you like to play (0 for first, 1 for second): ");
-        String cardPosition = in.nextLine();
-        while (!cardPosition.equals("0") && !cardPosition.equals("1")) {
-            System.out.println("Please enter a valid card position");
-            System.out.print("Which card would you like to play (0 for first, 1 for second): ");
-            cardPosition = in.nextLine();
-        }
+        int idx = in.getCard();
 
-        int idx = Integer.parseInt(cardPosition);
         return user.getHand().remove(idx);
     }
 }
