@@ -66,15 +66,6 @@ abstract class GameActions {
         } else if (cardComparison < 0) {
             System.out.println("You have lost the comparison");
             user.eliminate();
-        } else {
-            System.out.println("You have the same card!");
-            if (opponent.getDiscarded().value() > user.getDiscarded().value()) {
-                System.out.println("You have lost the used pile comparison");
-                user.eliminate();
-            } else {
-                System.out.println("You have won the used pile comparison");
-                opponent.eliminate();
-            }
         }
     }
 
