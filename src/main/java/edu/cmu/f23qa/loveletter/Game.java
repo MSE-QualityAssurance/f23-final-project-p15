@@ -1,7 +1,6 @@
 package edu.cmu.f23qa.loveletter;
 
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * The main game class. Contains methods for running the game.
@@ -9,6 +8,7 @@ import java.util.Stack;
 public class Game extends GameActions {
     private PlayerList players;
     private Deck deck;
+    private Player lastRoundWinner = null;
 
     /**
      * The input stream.
@@ -66,14 +66,14 @@ public class Game extends GameActions {
      * The main game loop.
      */
     public void start() {
-        while (players.getGameWinner() == null) {
+        while (players.getGameWinner().size() != 1) {
             players.reset(); // clear their hands and discards
             setDeck();
 
             players.dealCards(deck);
-            players.setBeginner();
+            players.setBeginner(lastRoundWinner);
             
-            while (!players.checkForRoundWinner() && deck.hasMoreCards()) {
+            while (players.getAlivePlayers().size() != 1 && deck.hasMoreCards()) {
                 Player turn = players.getCurrentPlayer();
 
                 if (turn.getHand().hasCards()) {
@@ -97,13 +97,23 @@ public class Game extends GameActions {
                         playCard(getCard(turn), turn);
                     }
                 }
+                // check if the round ends
+                checkForRoundWinner();  
             }
-            checkForRoundWinner();
-            // check if the round end
-        }
+            
+            // check if the game ends
+            List<Player> gameWinners = players.getGameWinner();
+            if (gameWinners.size() == 1) {
+                System.out.println(gameWinners.get(0) + " has won the game and the heart of the princess!");
+                break;
+            }
+            // in case of a tie
+            else if (gameWinners.size() > 1) {
+                System.out.println("It's a tie! Let's play one more round!");
+            }
 
-        Player gameWinner = players.getGameWinner();
-        System.out.println(gameWinner + " has won the game and the heart of the princess!");
+        } // end of game
+
     }
 
     /**
@@ -172,34 +182,33 @@ public class Game extends GameActions {
     }
 
     /** 
-     * Check for winner after a round end
-     * @param user
-     *      the current player
+     * Check for winner after a round ends
      * @param opponent
      * the current opponent
      */
-    private boolean checkForRoundWinner() {
-        Stack<Player> winners;
-        if (players.checkForRoundWinner() && players.getRoundWinner() != null) {
-            winners = players.getRoundWinner();
-        } 
-        else if (players.compareUsedPiles() != null){ // compare used piles
-            winners = players.compareUsedPiles();
+    private List<Player> checkForRoundWinner() {
+        List<Player> winners = new ArrayList<Player>();
+        List<Player> alivePlayers = players.getAlivePlayers();
+        // only one player alive, this round ends and he becomes the winner
+        if (alivePlayers.size() == 1) {
+            winners = alivePlayers;
         }
-        else { // multi winnners after comparing used piles
-            // check if this could be the final round
-            // if it is, the game should go on with an extra round
-            System.out.println("There are multiple winners in the final round, an extra round starts now!");
-            return true;
+        // multiple players alive, check their hands
+        else {
+            List<Player> winnersAfterCmpHands = players.compareHand(alivePlayers);
+            if (winnersAfterCmpHands.size() == 1) {
+                winners = winnersAfterCmpHands;
+            } else {
+                winners = players.compareUsedPiles(winnersAfterCmpHands); 
+            }
         }
-        // travers winner in winners
-        Player winner;
-        while (!winners.isEmpty()) {
-            winner = winners.pop();
+
+        for (Player winner : winners) {
             winner.addToken();
-            System.out.println(winner.getName() + " has won this round!");
-            players.print();
         }
-        return true;
+
+        lastRoundWinner = winners.get(0);
+
+        return winners;
     }
 }

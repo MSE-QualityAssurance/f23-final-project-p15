@@ -1,16 +1,32 @@
 package edu.cmu.f23qa.loveletter;
 
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 public class PlayerList {
 
     private LinkedList<Player> players;
     private Player lastRoundWinner = null;
     private int currentPlayer = 0;
+    private int tokensToWin = 0;
 
     public PlayerList() {
         this.players = new LinkedList<>();
+        this.tokensToWin = getTokensToWin();
+    }
+
+    /**
+     * Set the number of tokens to win the game
+     * @return the number of tokens to win the game
+     */
+    private int getTokensToWin() {
+        Map<Integer, Integer> playerNumToToken = new HashMap<>();
+        playerNumToToken.put(2, 7);
+        playerNumToToken.put(3, 5);
+        playerNumToToken.put(4, 4);
+
+        int numPlayers = this.players.size();
+
+        return playerNumToToken.getOrDefault(numPlayers, 0);
     }
 
     /**
@@ -74,49 +90,44 @@ public class PlayerList {
     }
 
     /**
-     * Checks the list for a single Player with remaining cards.
+     * Returns all the players alive in this round.
      *
-     * @return true if there is a winner, false if not
+     * @return a list of alive players in this round
      */
-    public boolean checkForRoundWinner() {
-        int count = 0;
+    public List<Player> getAlivePlayers() {
+        List<Player> winners = new ArrayList<>();
         for (Player p : players) {
             if (p.getHand().hasCards()) {
-                count++;
+                winners.add(p);
             }
         }
-        return count == 1;
+        return winners;
     }
 
     /**
-     * Returns the winner of the round.
+     * Returns the list of players who reach the target number of token of the game.
      *
-     * @return the round winner
+     * @return the list of game winner
      */
-    public Stack<Player> getRoundWinner() {
-        Stack<Player> winners = new Stack<>();
+    public List<Player> getGameWinner() {
+        List<Player> winners = new ArrayList<>();
+        int maxTokens = 0;
+
         for (Player p : players) {
-            if (p.getHand().hasCards()) {
-                winners.push(p);
-                return winners;
+            if (p.getTokens() >= tokensToWin && p.getTokens() > maxTokens) {
+                winners.clear();
+                winners.add(p);
+                maxTokens = p.getTokens();
+            }
+            else if (p.getTokens() >= tokensToWin && p.getTokens() == maxTokens) {
+                winners.add(p);
             }
         }
-        return null;
+
+        return winners;
     }
 
-    /**
-     * Returns the winner of the game.
-     *
-     * @return the game winner
-     */
-    public Player getGameWinner() {
-        for (Player p : players) {
-            if (p.getTokens() == 5) {
-                return p;
-            }
-        }
-        return null;
-    }
+
 
     /**
      * Deals a card to each Player in the list.
@@ -148,48 +159,50 @@ public class PlayerList {
     }
 
     /**
+     * Returns the players with the highest hand value.
+     * 
+     * @return the players with the highest hand value
+     */
+    public List<Player> compareHand(List<Player> alivePlayers) {
+        List<Player> winners = new ArrayList<>();
+        int maxHand = -1;
+        for (Player player : alivePlayers) {
+            int hand = player.getHand().peek(0).value();
+            if (hand > maxHand) {
+                maxHand = hand;
+                winners.clear();
+                winners.add(player);
+            } else if (hand == maxHand) {
+                winners.add(player);
+            } 
+        }
+        return winners;
+    }
+
+    /**
      * Returns the player with the highest used pile value.
      *
      * @return the player with the highest used pile value; 
      *         or null if there is a tie
      */
-    public Stack<Player> compareUsedPiles() {
-        Player winner = players.getFirst();
-        Stack<Player> winners = new Stack<>();
-        for (Player p : players) {
-            if (p.getDiscarded().value() > winner.getDiscarded().value()) {
-                // add p to the winners
-                winner = p;
-            }
-            else if (p.getDiscarded().value() == winner.getDiscarded().value()) {
-                // there's a tie, see if it's a final round
-                // if it is, the game should go on with an extra round
-                if (p.getTokens() == winner.getTokens() && ifFinalRound(p))
-                    return null;
-                // if not, accept multiple winners
-                else 
-                    winners.push(p);
-            }
+    public List<Player> compareUsedPiles(List<Player> winnersAfterCmpHands) {
+        List<Player> winners = new ArrayList<>();
+        int maxDiscardedSum = -1;
+        for (Player p : winnersAfterCmpHands) {
+            int discardedSum = p.getDiscarded().value();
+            if (discardedSum > maxDiscardedSum) {
+                maxDiscardedSum = discardedSum;
+                winners.clear();
+                winners.add(p);
+            } else if (discardedSum == maxDiscardedSum) {
+                winners.add(p);
+            } 
         }
-        winners.push(winner);
-        // get the  winner at the bottom of stack winners
-        this.lastRoundWinner = winners.elementAt(0);
+
         return winners;
     }
 
-    private boolean ifFinalRound(Player p) {
-        int numPlayers = this.getNumPlayers();
-        if (numPlayers == 2) {
-            return p.getTokens()+1 == 7;
-        }
-        else if (numPlayers == 3) {
-            return p.getTokens()+1 == 5;
-        }
-        else if (numPlayers == 4) {
-            return p.getTokens()+1 == 4;
-        }
-        return false;
-    }
+
 
     /**
      * Returns the number of players in the list.
@@ -199,32 +212,23 @@ public class PlayerList {
         return players.size();
     }
 
-    /**
-     * Get the last round's winner's index in players
-     * @return the winner'index
-     */
-    private int getLastRoundWinner() {
-        Player winner = this.lastRoundWinner;
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i) == winner) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     /**
      * Reset the beginning player at the beginning of a round
      * @param
      * @return
      */
-    public void setBeginner() {
-        if (getLastRoundWinner() != -1) { // there is a winner from last round, starts with him
-            this.currentPlayer = getLastRoundWinner();
+    public void setBeginner(Player winner) {
+        if (winner != null) { // there is a winner from last round, starts with him
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i) == winner) {
+                    this.currentPlayer = i;
+                    break;
+                }
+            }
             return;
         }
         else
             return;
     }
-
-}
+    }
