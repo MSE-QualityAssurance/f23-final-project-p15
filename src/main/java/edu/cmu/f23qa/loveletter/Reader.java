@@ -58,15 +58,17 @@ public class Reader {
      */
     public int getCard() {
         System.out.println();
-        System.out.print("Which card would you like to play (0 for first, 1 for second): ");
-        String cardPosition = in.nextLine();
-        while (!cardPosition.equals("0") && !cardPosition.equals("1")) {
-            System.out.println("Please enter a valid card position");
+        String cardPosition;
+        while (true) {
             System.out.print("Which card would you like to play (0 for first, 1 for second): ");
             cardPosition = in.nextLine();
-        }
-
-        return Integer.parseInt(cardPosition);
+            if (!cardPosition.equals("0") && !cardPosition.equals("1")) {
+                System.out.println("Please enter a valid card position");
+                continue;
+            } else {
+                return Integer.parseInt(cardPosition);
+            }
+        }       
     }
 
     /**
