@@ -5,7 +5,6 @@ import java.util.*;
 public class PlayerList {
 
     private LinkedList<Player> players;
-    private Player lastRoundWinner = null;
     private int currentPlayer = 0;
     private int tokensToWin = 0;
 
