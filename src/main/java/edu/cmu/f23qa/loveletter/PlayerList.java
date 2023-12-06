@@ -88,7 +88,7 @@ public class PlayerList {
     public List<Player> getAlivePlayers() {
         List<Player> winners = new ArrayList<>();
         for (Player p : players) {
-            if (p.getHand().hasCards()) {
+            if (p.isAlive()) {
                 winners.add(p);
             }
         }

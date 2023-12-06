@@ -49,7 +49,7 @@ public class Game extends GameActions {
             while (players.getAlivePlayers().size() != 1 && deck.hasMoreCards()) {
                 Player turn = players.getCurrentPlayer();
 
-                if (turn.getHand().hasCards()) {
+                if (turn.isAlive()) {
                     players.printUsedPiles();
                     System.out.println("\n" + turn.getName() + "'s turn:");
                     if (turn.isProtected()) {

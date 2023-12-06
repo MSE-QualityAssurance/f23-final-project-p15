@@ -91,7 +91,7 @@ public class Reader {
             } else if (opponent.isProtected()) {
                 System.out.println("This player is protected by a handmaiden");
 
-            } else if (!opponent.getHand().hasCards()) {
+            } else if (!opponent.isAlive()) {
                 System.out.println("This player is out of cards");
 
             } else {
