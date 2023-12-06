@@ -13,12 +13,10 @@ public class Deck {
     }
 
     public void build() {
-        // get the number of players
         // if 2-4, 16 cards
         // if 5-8, 32 cards
         // get the number of inputted players
         
-
         for (int i = 0; i < 5; i++) {
             deck.push(Card.GUARD);
         }

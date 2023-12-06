@@ -29,21 +29,15 @@ public class PlayerList {
     }
 
     /**
-     * Adds a new Player object with the given name to the PlayerList.
+     * Add a list of players to the PlayerList.
      *
-     * @param name
-     *          the given player name
-     *
-     * @return true if the player is not already in the list and can be added, false if not
+     * @param playerNames
+     *          a list of player names
      */
-    public boolean addPlayer(String name) {
-        for (Player p : players) {
-            if (p.getName().equalsIgnoreCase(name)) {
-                return false;
-            }
+    public void addPlayers(List<String> playerNames) {
+        for (String name : playerNames) {
+            players.addLast(new Player(name));
         }
-        players.addLast(new Player(name));
-        return true;
     }
 
     /**
