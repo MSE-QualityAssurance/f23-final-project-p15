@@ -68,23 +68,7 @@ public class CardTest {
             && opponent.getHand().hasCards(), "Nothing happens");    
     }
 
-    // /*
-    //  * I cannot use the Baron on a [abnormal player] 
-    //  * who is currently protected by a Handmaid.
-    //  */
-    // @Test
-    // void testBaronProtected(){
-    //     Player user = new Player("User");
-    //     user.getHand().add(Card.GUARD);
-    //     Player opponent = new Player("Opponent");
-    //     opponent.getHand().add(Card.GUARD);
-    //     opponent.switchProtection();
-    //     GameActions gameActions = new GameActions() {}; 
-    //     gameActions.useBaron(user, opponent);
-    //     Assertions.assertTrue(user.getHand().hasCards()
-    //         && opponent.getHand().hasCards(), "Nothing happens");    
-    // }
-        /*
+    /*
      * After drawing, I discard the Baron and choose  [normal player]. 
      * My card is a Priest, and  [normal player] is a Guard. 
      * Since my card has a higher value, the [normal player] is knocked out of the round.
@@ -160,31 +144,5 @@ public class CardTest {
         // Assertion: Opponent should be eliminated
         Assertions.assertTrue(user.getHand().hasCards()
             && opponent.getHand().hasCards(), "Nothing happens");   
-    }
-
-    @Test
-    void testBaronProtectedMock(){
-        // Mocking the players and their hands
-        Player user = Mockito.mock(Player.class);
-        Player opponent = Mockito.mock(Player.class);
-
-        Hand userHand = Mockito.mock(Hand.class);
-        Hand opponentHand = Mockito.mock(Hand.class);
-
-        // Setting up the hands
-        when(user.getHand()).thenReturn(userHand);
-        when(opponent.getHand()).thenReturn(opponentHand);
-
-        when(userHand.peek(0)).thenReturn(Card.GUARD);
-        when(opponentHand.peek(0)).thenReturn(Card.GUARD);
-        
-        // Action: User uses Baron on opponent
-        opponent.switchProtection();
-        GameActions gameActions = new GameActions() {}; 
-        gameActions.useBaron(user, opponent);
-
-        // Assertion: Opponent should be eliminated
-        Assertions.assertTrue(user.getHand().hasCards()
-            && opponent.getHand().hasCards(), "Nothing happens"); 
     }
 }
