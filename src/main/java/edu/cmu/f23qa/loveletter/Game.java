@@ -19,9 +19,9 @@ public class Game extends GameActions {
      * @param in
      *          the input stream
      */
-    public Game(Reader in) {
-        this.players = new PlayerList();
-        this.deck = new Deck();
+    public Game(Reader in, PlayerList players, Deck deck) {
+        this.players = players;
+        this.deck = deck;
         this.in = in;
     }
 

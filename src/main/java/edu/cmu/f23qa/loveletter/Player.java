@@ -16,10 +16,10 @@ public class Player {
      */
     private int tokens;
 
-    public Player(String name) {
+    public Player(String name, Hand hand, DiscardPile discardPile) {
         this.name = name;
-        this.hand = new Hand();
-        this.discarded = new DiscardPile();
+        this.hand = hand;
+        this.discarded = discardPile;
         this.isProtected = false;
         this.tokens = 0;
     }

@@ -9,6 +9,10 @@ public class DiscardPile {
         this.cards = new ArrayList<>();
     }
 
+    public DiscardPile(ArrayList<Card> arrayList) {
+        this.cards = arrayList;
+    }
+
     public void add(Card card) {
         this.cards.add(card);
     }

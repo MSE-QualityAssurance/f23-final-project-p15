@@ -9,6 +9,10 @@ public class Hand {
         this.hand  = new ArrayList<>();
     }
 
+    public Hand(ArrayList<Card> arrayList) {
+        this.hand  = arrayList;
+    }
+
     /**
      * Peeks the card held by the player.
      *

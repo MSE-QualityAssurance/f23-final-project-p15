@@ -18,7 +18,9 @@ public class PlayerList {
      */
     public void addPlayers(List<String> playerNames) {
         for (String name : playerNames) {
-            players.addLast(new Player(name));
+            Hand hand = new Hand();
+            DiscardPile discardPile = new DiscardPile();
+            players.addLast(new Player(name, hand, discardPile));
         }
     }
 
