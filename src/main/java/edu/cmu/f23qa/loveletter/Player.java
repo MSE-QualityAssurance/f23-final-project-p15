@@ -50,6 +50,10 @@ public class Player {
         return this.discarded;
     }
 
+    public boolean isAlive() {
+        return this.hand.hasCards();
+    }
+
     /**
      * Checks to see if the user is protected by a handmaiden.
      *

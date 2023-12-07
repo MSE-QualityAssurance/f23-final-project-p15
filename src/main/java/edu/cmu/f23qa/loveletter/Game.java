@@ -17,8 +17,9 @@ public class Game extends GameActions {
 
     /**
      * Public constructor for a Game object.
+     * 
      * @param in
-     *          the input stream
+     *           the input stream
      */
     public Game(Reader in) {
         this.players = new PlayerList();
@@ -32,6 +33,7 @@ public class Game extends GameActions {
     public void setPlayers() {
         List<String> playerNames = in.getPlayers(2, 4);
         this.players.addPlayers(playerNames);
+        this.players.setTokensToWin();
     }
 
     /**
@@ -39,53 +41,69 @@ public class Game extends GameActions {
      */
     public void start() {
         while (players.getGameWinner().size() != 1) {
-            players.reset(); // clear their hands and discards
-            setDeck();
+            setUpRound();
+            playRound();
+            checkIfGameEnds();
+        } // end of game
 
-            players.dealCards(deck);
-            players.setBeginner(lastRoundWinner);
-            
-            while (players.getAlivePlayers().size() != 1 && deck.hasMoreCards()) {
-                Player turn = players.getCurrentPlayer();
+    }
 
-                if (turn.getHand().hasCards()) {
-                    players.printUsedPiles();
-                    System.out.println("\n" + turn.getName() + "'s turn:");
-                    if (turn.isProtected()) {
-                        turn.switchProtection();
-                    }
-                    turn.getHand().add(deck.draw());
+    /**
+     * Sets up each round of the game by resetting plaer states and preparing the deck
+     */
+    private void setUpRound() {
+        players.reset(); // clear their hands and discards
+        setDeck();
 
-                    int royaltyPos = turn.getHand().royaltyPos();
-                    if (royaltyPos != -1) {
-                        if (royaltyPos == 0 && turn.getHand().peek(1).value() == 7) {
-                            playCard(turn.getHand().remove(1), turn);
-                        } else if (royaltyPos == 1 && turn.getHand().peek(0).value() == 7) {
-                            playCard(turn.getHand().remove(0), turn);
-                        } else {
-                            playCard(getCard(turn), turn);
-                        }
+        players.dealCards(deck);
+        players.setBeginner(lastRoundWinner);
+    }
+
+    /**
+     * 
+     */
+    private void playRound() {
+        while (players.getAlivePlayers().size() != 1 && deck.hasMoreCards()) {
+            Player turn = players.getCurrentPlayer();
+
+            if (turn.isAlive()) {
+                players.printUsedPiles();
+                System.out.println("\n" + turn.getName() + "'s turn:");
+                if (turn.isProtected()) {
+                    turn.switchProtection();
+                }
+                turn.getHand().add(deck.draw());
+
+                int royaltyPos = turn.getHand().royaltyPos();
+                if (royaltyPos != -1) {
+                    if (royaltyPos == 0 && turn.getHand().peek(1).value() == 7) {
+                        playCard(turn.getHand().remove(1), turn);
+                    } else if (royaltyPos == 1 && turn.getHand().peek(0).value() == 7) {
+                        playCard(turn.getHand().remove(0), turn);
                     } else {
                         playCard(getCard(turn), turn);
                     }
+                } else {
+                    playCard(getCard(turn), turn);
                 }
-                // check if the round ends
-                checkForRoundWinner();  
             }
-            
-            // check if the game ends
-            List<Player> gameWinners = players.getGameWinner();
-            if (gameWinners.size() == 1) {
-                System.out.println(gameWinners.get(0) + " has won the game and the heart of the princess!");
-                break;
-            }
-            // in case of a tie
-            else if (gameWinners.size() > 1) {
-                System.out.println("It's a tie! Let's play one more round!");
-            }
+            // check if the round ends
+            checkForRoundWinner();
+        }
+    }
 
-        } // end of game
-
+    /**
+     * Check if the game ends
+     */ 
+    private void checkIfGameEnds() {
+        List<Player> gameWinners = players.getGameWinner();
+        if (gameWinners.size() == 1) {
+            System.out.println(gameWinners.get(0) + " has won the game and the heart of the princess!");
+        }
+        // in case of a tie
+        else if (gameWinners.size() > 1) {
+            System.out.println("It's a tie! Let's play one more round!");
+        }
     }
 
     /**
@@ -100,10 +118,11 @@ public class Game extends GameActions {
 
     /**
      * Determines the card used by the player and performs the card's action.
+     * 
      * @param card
-     *          the played card
+     *             the played card
      * @param user
-     *          the player of the card
+     *             the player of the card
      */
     private void playCard(Card card, Player user) {
         int value = card.value();
@@ -153,7 +172,7 @@ public class Game extends GameActions {
      * Allows for the user to pick a card from their hand to play.
      *
      * @param user
-     *      the current player
+     *             the current player
      *
      * @return the chosen card
      */
@@ -164,8 +183,9 @@ public class Game extends GameActions {
         return user.getHand().remove(idx);
     }
 
-    /** 
+    /**
      * Check for winner after a round ends
+     * 
      * @return the winners of this round
      */
     private List<Player> checkForRoundWinner() {
@@ -181,7 +201,7 @@ public class Game extends GameActions {
             if (winnersAfterCmpHands.size() == 1) {
                 winners = winnersAfterCmpHands;
             } else {
-                winners = players.compareUsedPiles(winnersAfterCmpHands); 
+                winners = players.compareUsedPiles(winnersAfterCmpHands);
             }
         }
 
