@@ -23,6 +23,7 @@ public class Game extends GameActions {
     public Game(Reader in) {
         this.players = new PlayerList();
         this.deck = new Deck();
+        this.in = in;
     }
     
     public Game(Reader in, PlayerList players, Deck deck) {
