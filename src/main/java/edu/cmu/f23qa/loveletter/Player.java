@@ -23,6 +23,14 @@ public class Player {
         this.isProtected = false;
         this.tokens = 0;
     }
+    
+    public Player(String name, Hand hand, DiscardPile discardPile) {
+        this.name = name;
+        this.hand = hand;
+        this.discarded = discardPile;
+        this.isProtected = false;
+        this.tokens = 0;
+    }
 
     public void addToken() {
         this.tokens++;

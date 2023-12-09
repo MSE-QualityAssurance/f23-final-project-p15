@@ -12,6 +12,10 @@ public class Deck {
         this.deck = new Stack<>();
     }
 
+    public Deck(Stack<Card> stack) {
+        this.deck = stack;
+    }
+
     public void build() {
         // if 2-4, 16 cards
         // if 5-8, 32 cards
