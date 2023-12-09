@@ -6,9 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         Reader in = new Reader(new Scanner(System.in));
-        PlayerList players = new PlayerList();
-        Deck deck = new Deck();
-        Game g = new Game(in, players, deck);
+        Game g = new Game(in);
         g.setPlayers();
         g.start();
     }

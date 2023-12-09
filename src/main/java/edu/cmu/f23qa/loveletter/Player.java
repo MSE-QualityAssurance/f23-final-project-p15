@@ -16,6 +16,14 @@ public class Player {
      */
     private int tokens;
 
+    public Player(String name) {
+        this.name = name;
+        this.hand = new Hand();
+        this.discarded = new DiscardPile();
+        this.isProtected = false;
+        this.tokens = 0;
+    }
+    
     public Player(String name, Hand hand, DiscardPile discardPile) {
         this.name = name;
         this.hand = hand;
