@@ -19,13 +19,19 @@ public class Game extends GameActions {
      * @param in
      *          the input stream
      */
-
     public Game(Reader in) {
         this.players = new PlayerList();
         this.deck = new Deck();
         this.in = in;
     }
     
+    /**
+     * Public constructor for a Game object.
+     * @param in
+     * @param players
+     * @param deck
+     *          the input stream
+     */
     public Game(Reader in, PlayerList players, Deck deck) {
         this.players = players;
         this.deck = deck;
