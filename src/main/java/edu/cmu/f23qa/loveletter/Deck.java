@@ -5,6 +5,8 @@ import java.util.Stack;
 
 public class Deck {
     private Stack<Card> deck;
+    private Card initiallyRemovedCard;
+    private boolean removedCardUsed = false;
 
     public Deck() {
         this.deck = new Stack<>();
@@ -45,7 +47,9 @@ public class Deck {
 
     public void removeCards(int num) {
         // remove one card from deck, face down
-        deck.pop();
+        // and also keep a record of it
+        initiallyRemovedCard = deck.pop();
+
         // when num == 2, remove 3 more cards and face up (add them to discards)
         if (num == 2) {
             System.out.println("Removed 3 additional cards when there are only 2 players: ");
@@ -57,5 +61,24 @@ public class Deck {
 
     public boolean hasMoreCards() {
         return !deck.isEmpty();
+    }
+
+    /**
+     * For Prince, if the deck is empty, we could add the unused removed card back to the deck.
+     * @return true if the deck is not empty, or it's empty but the removed card has not been used yet; 
+     * false if the deck is empty and the removed card has been used
+     */
+    public boolean hasMoreCardsForPrince() {
+        if (deck.isEmpty() && !removedCardUsed) {
+            removedCardUsed = true;
+            deck.push(initiallyRemovedCard);
+            return true;
+        }
+        else if (deck.isEmpty() && removedCardUsed) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

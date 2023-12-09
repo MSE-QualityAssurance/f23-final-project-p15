@@ -5,9 +5,25 @@ import java.util.*;
 public class PlayerList {
 
     private LinkedList<Player> players;
+    private int currentPlayer = 0;
+    private int tokensToWin = 0;
 
     public PlayerList() {
         this.players = new LinkedList<>();
+    }
+
+    /**
+     * Set the number of tokens to win the game
+     */
+    public void setTokensToWin() {
+        Map<Integer, Integer> playerNumToToken = new HashMap<>();
+        playerNumToToken.put(2, 7);
+        playerNumToToken.put(3, 5);
+        playerNumToToken.put(4, 4);
+
+        int numPlayers = this.players.size();
+
+        this.tokensToWin = playerNumToToken.getOrDefault(numPlayers, 0);
     }
 
     /**
@@ -28,9 +44,9 @@ public class PlayerList {
      * @return the first player in the list
      */
     public Player getCurrentPlayer() {
-        Player current = players.removeFirst();
-        players.addLast(current);
-        return current;
+        int pre = currentPlayer;
+        currentPlayer = (currentPlayer + 1) % players.size();
+        return players.get(pre);
     }
 
     /**
@@ -65,47 +81,44 @@ public class PlayerList {
     }
 
     /**
-     * Checks the list for a single Player with remaining cards.
+     * Returns all the players alive in this round.
      *
-     * @return true if there is a winner, false if not
+     * @return a list of alive players in this round
      */
-    public boolean checkForRoundWinner() {
-        int count = 0;
+    public List<Player> getAlivePlayers() {
+        List<Player> winners = new ArrayList<>();
         for (Player p : players) {
-            if (p.getHand().hasCards()) {
-                count++;
+            if (p.isAlive()) {
+                winners.add(p);
             }
         }
-        return count == 1;
+        return winners;
     }
 
     /**
-     * Returns the winner of the round.
+     * Returns the list of players who reach the target number of token of the game.
      *
-     * @return the round winner
+     * @return the list of game winner
      */
-    public Player getRoundWinner() {
+    public List<Player> getGameWinner() {
+        List<Player> winners = new ArrayList<>();
+        int maxTokens = 0;
+
         for (Player p : players) {
-            if (p.getHand().hasCards()) {
-                return p;
+            if (p.getTokens() >= tokensToWin && p.getTokens() > maxTokens) {
+                winners.clear();
+                winners.add(p);
+                maxTokens = p.getTokens();
+            }
+            else if (p.getTokens() >= tokensToWin && p.getTokens() == maxTokens) {
+                winners.add(p);
             }
         }
-        return null;
+
+        return winners;
     }
 
-    /**
-     * Returns the winner of the game.
-     *
-     * @return the game winner
-     */
-    public Player getGameWinner() {
-        for (Player p : players) {
-            if (p.getTokens() == 5) {
-                return p;
-            }
-        }
-        return null;
-    }
+
 
     /**
      * Deals a card to each Player in the list.
@@ -137,19 +150,50 @@ public class PlayerList {
     }
 
     /**
+     * Returns the players with the highest hand value.
+     * 
+     * @return the players with the highest hand value
+     */
+    public List<Player> compareHand(List<Player> alivePlayers) {
+        List<Player> winners = new ArrayList<>();
+        int maxHand = -1;
+        for (Player player : alivePlayers) {
+            int hand = player.getHand().peek(0).value();
+            if (hand > maxHand) {
+                maxHand = hand;
+                winners.clear();
+                winners.add(player);
+            } else if (hand == maxHand) {
+                winners.add(player);
+            } 
+        }
+        return winners;
+    }
+
+    /**
      * Returns the player with the highest used pile value.
      *
-     * @return the player with the highest used pile value
+     * @return the player with the highest used pile value; 
+     *         or null if there is a tie
      */
-    public Player compareUsedPiles() {
-        Player winner = players.getFirst();
-        for (Player p : players) {
-            if (p.getDiscarded().value() > winner.getDiscarded().value()) {
-                winner = p;
-            }
+    public List<Player> compareUsedPiles(List<Player> winnersAfterCmpHands) {
+        List<Player> winners = new ArrayList<>();
+        int maxDiscardedSum = -1;
+        for (Player p : winnersAfterCmpHands) {
+            int discardedSum = p.getDiscarded().value();
+            if (discardedSum > maxDiscardedSum) {
+                maxDiscardedSum = discardedSum;
+                winners.clear();
+                winners.add(p);
+            } else if (discardedSum == maxDiscardedSum) {
+                winners.add(p);
+            } 
         }
-        return winner;
+
+        return winners;
     }
+
+
 
     /**
      * Returns the number of players in the list.
@@ -159,4 +203,23 @@ public class PlayerList {
         return players.size();
     }
 
-}
+
+    /**
+     * Reset the beginning player at the beginning of a round
+     * @param
+     * @return
+     */
+    public void setBeginner(Player winner) {
+        if (winner != null) { // there is a winner from last round, starts with him
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i) == winner) {
+                    this.currentPlayer = i;
+                    break;
+                }
+            }
+            return;
+        }
+        else
+            return;
+    }
+    }

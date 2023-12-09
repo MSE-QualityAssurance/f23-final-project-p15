@@ -77,7 +77,7 @@ abstract class GameActions {
      */
     void usePrince(Player opponent, Deck d) {
         opponent.eliminate();
-        if (d.hasMoreCards()) {
+        if (d.hasMoreCardsForPrince()) {
             opponent.getHand().add(d.draw());
         }
     }
