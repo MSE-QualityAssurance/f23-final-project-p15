@@ -123,7 +123,7 @@ public class Game extends GameActions {
      * Builds a new full deck and shuffles it.
      */
     private void setDeck() {
-        this.deck.build();
+        this.deck.build(this.players.getNumPlayers());
         this.deck.shuffle();
         // remove cards from the deck initially, according to the rule
         this.deck.removeCards(this.players.getNumPlayers());

@@ -16,11 +16,8 @@ public class Deck {
         this.deck = stack;
     }
 
-    public void build() {
-        // if 2-4, 16 cards
-        // if 5-8, 32 cards
-        // get the number of inputted players
-        
+    public void build(int numPlayers) {
+        // 16 cards for 2-4 players
         for (int i = 0; i < 5; i++) {
             deck.push(Card.GUARD);
         }
@@ -35,6 +32,24 @@ public class Deck {
         deck.push(Card.KING);
         deck.push(Card.COUNTESS);
         deck.push(Card.PRINCESS);
+
+        // for premium game (5-8 players), add additional 16 cards
+        if (numPlayers > 4) {
+            for (int i = 0; i < 2; i++) {
+                deck.push(Card.COUNT);
+                deck.push(Card.SYCOPHANT);
+                deck.push(Card.BARONESS);
+                deck.push(Card.CARDINAL);
+            }
+
+            for (int i = 0; i < 3; i++) {
+                deck.push(Card.GUARD);
+            }
+
+            deck.push(Card.BISHOP);
+            deck.push(Card.QUEEN);
+            deck.push(Card.CONSTABLE);
+        }
     }
 
     public void shuffle() {
