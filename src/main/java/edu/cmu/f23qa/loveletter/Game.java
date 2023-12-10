@@ -142,7 +142,8 @@ public class Game extends GameActions {
 
         // Get opponent
         List<Card> needOpponent = Arrays.asList(Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING);
-
+        // to add later: Card.QUEEN
+        
         Player opponent = null;
         if (needOpponent.contains(card)) {
             if (card == Card.PRINCE) {
@@ -176,6 +177,8 @@ public class Game extends GameActions {
             case COUNTESS:
                 usePrincess(user);
                 break;
+            case QUEEN:
+                useQueen(user, opponent);
             default:
                 break;
         }

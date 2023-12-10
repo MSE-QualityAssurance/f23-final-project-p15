@@ -59,6 +59,29 @@ abstract class GameActions {
     }
 
     /**
+     * Allows the user to compare cards with an opponent.
+     * If the user's card is of higher value, the opposing player wins the round and their card.
+     * If the user's card is of lower value, the user wins the round and their card.
+     * @param user
+     *          the initiator of the comparison
+     * @param opponent
+     *         the targeted player
+     */
+    void useQueen(Player user, Player opponent) {
+        Card userCard = user.getHand().peek(0);
+        Card opponentCard = opponent.getHand().peek(0);
+
+        int cardComparison = Integer.compare(userCard.value(), opponentCard.value());
+        if (cardComparison > 0) {
+            System.out.println("You have lost the comparison!");
+            user.eliminate();
+        } else if (cardComparison < 0) {
+            System.out.println("You have won the comparison");
+            opponent.eliminate();
+        }
+    }
+
+    /**
      * Switches the user's protection for one turn. This protects them from being targeted.
      * @param user
      *          the current player
