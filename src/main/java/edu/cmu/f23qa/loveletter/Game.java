@@ -44,7 +44,7 @@ public class Game extends GameActions {
      * Sets up the players that make up the player list.
      */
     public void setPlayers() {
-        List<String> playerNames = in.getPlayers(2, 4);
+        List<String> playerNames = in.getPlayers(2, 8);
         this.players.addPlayers(playerNames);
         this.players.setTokensToWin();
     }
