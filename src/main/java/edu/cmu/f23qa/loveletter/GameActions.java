@@ -21,7 +21,7 @@ abstract class GameActions {
     void useGuard(String guessedCard, Player opponent, Player user, Deck deck) {
         Card opponentCard = opponent.getHand().peek(0);
 
-        // Effects of "Assasin"
+        // Effects of Assasin
         if (opponentCard == Card.ASSASIN) {
             System.out.println("The opponent held Assasin, you died!");
             user.eliminate();
