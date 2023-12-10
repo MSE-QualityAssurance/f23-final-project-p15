@@ -8,7 +8,17 @@ public enum Card {
     PRINCE("Prince", 5),
     KING("King", 6),
     COUNTESS("Countess", 7),
-    PRINCESS("Princess", 8);
+    PRINCESS("Princess", 8),
+    // new cards for premium game (5-8 players)
+    BISHOP("Bishop", 9),
+    QUEEN("Queen", 7),
+    CONSTABLE("Constable",6),
+    COUNT("Count", 5),
+    SYCOPHANT("Sycophant", 4),
+    BARONESS("Baroness", 3),
+    CARDINAL("Cardinal", 2),
+    JESTER("Jester", 0),
+    ASSASIN("Assasin", 0);
 
     private String name;
     private int value;
@@ -24,7 +34,16 @@ public enum Card {
         "prince",
         "king",
         "countess",
-        "princess"
+        "princess",
+        "bishop",
+        "queen",
+        "constable",
+        "count",
+        "sycophant",
+        "baroness",
+        "cardinal",
+        "jester",
+        "assasin"
     };
 
     /**
