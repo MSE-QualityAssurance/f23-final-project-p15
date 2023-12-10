@@ -20,7 +20,11 @@ public class PlayerList {
         playerNumToToken.put(2, 7);
         playerNumToToken.put(3, 5);
         playerNumToToken.put(4, 4);
-
+        playerNumToToken.put(5, 4);
+        playerNumToToken.put(6, 4);
+        playerNumToToken.put(7, 4);
+        playerNumToToken.put(8, 4);
+        
         int numPlayers = this.players.size();
 
         this.tokensToWin = playerNumToToken.getOrDefault(numPlayers, 0);
