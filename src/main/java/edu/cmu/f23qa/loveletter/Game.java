@@ -138,16 +138,14 @@ public class Game extends GameActions {
      *             the player of the card
      */
     private void playCard(Card card, Player user) {
-        int value = card.value();
-        String name = card.name();
-
         user.getDiscarded().add(card);
 
         // Get opponent
-        List<Integer> needOpponent = Arrays.asList(1, 2, 3, 5, 6);
+        List<Card> needOpponent = Arrays.asList(Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING);
+
         Player opponent = null;
-        if (needOpponent.contains(value)) {
-            if (value == 5) {
+        if (needOpponent.contains(card)) {
+            if (card == Card.PRINCE) {
                 opponent = in.getOpponent(players);
             } else {
                 opponent = in.getOpponentNotSelf(players, user);
@@ -155,27 +153,27 @@ public class Game extends GameActions {
         }
 
         // Handlers
-        switch (value) {
-            case 1:
+        switch (card) {
+            case GUARD:
                 String guessedCard = in.pickCardWhenGuard();
                 useGuard(guessedCard, opponent);
                 break;
-            case 2:
+            case PRIEST:
                 usePriest(opponent);
                 break;
-            case 3:
+            case BARON:
                 useBaron(user, opponent);
                 break;
-            case 4:
+            case HANDMAIDEN:
                 useHandmaiden(user);
                 break;
-            case 5:
+            case PRINCE:
                 usePrince(opponent, deck);
                 break;
-            case 6:
+            case KING:
                 useKing(user, opponent);
                 break;
-            case 8:
+            case COUNTESS:
                 usePrincess(user);
                 break;
             default:
