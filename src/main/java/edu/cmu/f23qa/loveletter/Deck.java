@@ -49,6 +49,8 @@ public class Deck {
             deck.push(Card.BISHOP);
             deck.push(Card.QUEEN);
             deck.push(Card.CONSTABLE);
+            deck.push(Card.JESTER);
+            deck.push(Card.ASSASIN);
         }
     }
 

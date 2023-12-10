@@ -139,6 +139,8 @@ public class Game extends GameActions {
      */
     private void playCard(Card card, Player user) {
         int value = card.value();
+        String name = card.name();
+
         user.getDiscarded().add(card);
 
         // Get opponent
