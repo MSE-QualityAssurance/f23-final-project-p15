@@ -156,7 +156,7 @@ public class Game extends GameActions {
         switch (card) {
             case GUARD:
                 String guessedCard = in.pickCardWhenGuard();
-                useGuard(guessedCard, opponent);
+                useGuard(guessedCard, opponent, user, deck);
                 break;
             case PRIEST:
                 usePriest(opponent);
