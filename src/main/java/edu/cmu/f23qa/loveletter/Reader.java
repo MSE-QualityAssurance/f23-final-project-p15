@@ -143,24 +143,24 @@ public class Reader {
     }
 
     /**
-     * Pick the card players want to guess when they use the "Bishop" card
-     * @return The card the player wants to guess
+     * Pick the card number players want to guess when they use the "Bishop" card
+     * @return The card number the player wants to guess
      */
-    public String pickCardWhenBishop() {
-        ArrayList<String> cardNames = new ArrayList<>(Arrays.asList(Card.CARD_NAMES));
+    public int pickCardNumberWhenBishop() {
+        int cardNumber;
 
-        String cardName;
         while (true) {
-            System.out.print("Which card would you like to guess: ");
-            cardName = in.nextLine();
-
-            if (!cardNames.contains(cardName.toLowerCase())) {
-                System.out.println("Invalid card name");
+            System.out.print("Which card number would you like to guess, from 0-9: ");
+            cardNumber = in.nextInt();
+            in.nextLine();
+            if (cardNumber < 0 || cardNumber > 9) {
+                System.out.println("Invalid card number");
                 continue;
             } else {
-                return cardName;
+                break;
             }
         }
+        return cardNumber;
     }
 
     /**

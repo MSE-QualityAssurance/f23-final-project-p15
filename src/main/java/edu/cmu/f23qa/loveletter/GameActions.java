@@ -59,9 +59,9 @@ abstract class GameActions {
      * @param players
      *          the players in the game
      */
-    void useBishop(Player user, String guessedCard, Player opponent, Reader in, Deck d, PlayerList players) {
+    void useBishop(Player user, int guessedNum, Player opponent, Reader in, Deck d, PlayerList players) {
         Card opponentCard = opponent.getHand().peek(0);
-        if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
+        if (opponentCard.value() == guessedNum) {
             System.out.println("You have guessed correctly! You will now get a token!");
             user.addToken();
 

@@ -168,7 +168,7 @@ public class Game extends GameActions {
         switch (card) {
             case GUARD:
                 String guessedCardOfGuard = in.pickCardWhenGuard();
-                useGuard(guessedCardOfGuard, opponent);
+                useGuard(guessedCardOfGuard, opponent, user, deck);
                 break;
             case PRIEST:
                 usePriest(opponent);
@@ -189,7 +189,7 @@ public class Game extends GameActions {
                 usePrincess(user);
                 break;
             case BISHOP:
-                String guessedCardOfBishop = in.pickCardWhenBishop();
+                int guessedCardOfBishop = in.pickCardNumberWhenBishop();
                 useBishop(user, guessedCardOfBishop, opponent, in, deck, players);
                 break;
             case QUEEN:
