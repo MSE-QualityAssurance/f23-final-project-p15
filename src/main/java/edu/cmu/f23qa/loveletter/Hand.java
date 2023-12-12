@@ -42,13 +42,15 @@ public class Hand {
     }
 
     /**
-     * Finds the position of a royal card in the hand.
+     * Finds the position of a royal card (prince and king) in the hand.
      *
      * @return the position of a royal card, -1 if no royal card is in hand
      */
     public int royaltyPos() {
         for (int i = 0; i < hand.size(); i++) {
-            if (hand.get(i).value() == 5 || hand.get(i).value() == 6) {
+            // check if the card's name is King or Prince
+
+            if (hand.get(i).name().equalsIgnoreCase("Prince") || hand.get(i).name().equalsIgnoreCase("King")) {
                 return i;
             }
         }
