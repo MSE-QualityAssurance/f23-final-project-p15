@@ -43,6 +43,58 @@ abstract class GameActions {
     }
 
     /**
+     * Allows the user to guess a card that a player's hand contains.
+     * If the user is correct, the user gets a token, and the opponent may discard the revealed card and draw a new card.
+     * If the user is incorrect, the user is not affected.
+     * @param user
+     *          the initiator of the guessing
+     * @param guessedCard
+     *          the card that the user guesses
+     * @param opponent
+     *          the opponent
+     * @param in
+     *          the input stream
+     * @param d
+     *          the deck of cards
+     * @param players
+     *          the players in the game
+     */
+    void useBishop(Player user, int guessedNum, Player opponent, Reader in, Deck d, PlayerList players) {
+        Card opponentCard = opponent.getHand().peek(0);
+        if (opponentCard.value() == guessedNum) {
+            System.out.println("You have guessed correctly! You will now get a token!");
+            user.addToken();
+
+            // check if the game ends with this token
+            if (user.getTokens() == 4) {
+                System.out.println("You have won the game!");
+                return;
+            }
+            
+            System.out.println();
+            System.out.println("To player " + opponent.getName() + ", would you like to discard the revealed card and draw a new card?");
+            // when 0, the opponent wants to discard the revealed card and draw a new card
+            if (in.drawWhenBishop() == 0) {
+                System.out.println("You have discarded a " + opponentCard);
+                opponent.getDiscarded().add(opponent.getHand().remove(0));
+                // check if the deck is empty
+                if (d.hasMoreCards()) {
+                    opponent.getHand().add(d.draw());
+                    System.out.println("You have drawn a " + opponent.getHand().peek(0));
+                    return;
+                }
+                else {
+                    System.out.println("The deck is empty! You are out for this round!");
+                }
+            }
+            
+        }
+        else {
+            System.out.println("You have guessed incorrectly.");
+        }
+    }
+
+    /**
      * Allows the user to peek at the card of an opposing player.
      * @param opponent
      *          the targeted player
@@ -168,5 +220,20 @@ abstract class GameActions {
         } else if (pos == 1) {
             System.out.println(opponent2.getName() + " shows you a " + opponent2.getHand().peek(0));
         }
+    }
+
+    /**
+     * If the Jester is played, a Jester token is given to the chosen player
+     * If that player winds the round, the user gain a Token of Affection. 
+     * 
+     * @param players
+     *      the list of all players
+     * @para user
+     *      the player who play the Jester
+     * @para target
+     *      the chosen player which the Jester will have effect on
+     */
+    void useJester(PlayerList players, Player user, Player target) {
+        players.setJesterToken(user, target);
     }
 }

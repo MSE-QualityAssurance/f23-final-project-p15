@@ -84,7 +84,7 @@ public class Reader {
      *          Otherwise set as null
      * @return The player chosen as opponent
      */
-    Player getOpponent(PlayerList playerList, Player user, Player alreadyChosen) {
+    public Player getOpponent(PlayerList playerList, Player user, Player alreadyChosen) {
         Player opponent = null;
 
         while (true) {
@@ -119,7 +119,7 @@ public class Reader {
      * Pick the card players want to guess when they use the "Guard" card
      * @return The card the player wants to guess
      */
-    String pickCardWhenGuard() {
+    public String pickCardWhenGuard() {
         ArrayList<String> cardNames = new ArrayList<>(Arrays.asList(Card.CARD_NAMES));
 
         String cardName;
@@ -159,4 +159,36 @@ public class Reader {
             }
         }       
     }    
+
+    /**
+     * Pick the card number players want to guess when they use the "Bishop" card
+     * @return The card number the player wants to guess
+     */
+    public int pickCardNumberWhenBishop() {
+        int cardNumber;
+
+        while (true) {
+            System.out.print("Which card number would you like to guess, from 0-9: ");
+            cardNumber = in.nextInt();
+            in.nextLine();
+            if (cardNumber < 0 || cardNumber > 9) {
+                System.out.println("Invalid card number");
+                continue;
+            } else {
+                break;
+            }
+        }
+        return cardNumber;
+    }
+
+    /**
+     * Let the opponent of Bishop decides if he wants to discard the revealed card and draw a new card
+     * @return The choice of the player, 0 for draw a new card, 1 for do nothing
+     */
+    public int drawWhenBishop() {
+        System.out.println("0. Yes");
+        System.out.println("1. No");
+        System.out.print("Your choice: ");
+        return in.nextInt();
+    }
 }

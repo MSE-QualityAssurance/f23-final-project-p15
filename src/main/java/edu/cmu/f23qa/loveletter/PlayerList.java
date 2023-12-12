@@ -5,8 +5,10 @@ import java.util.*;
 public class PlayerList {
 
     private LinkedList<Player> players;
-    private int currentPlayer = 0;
+    private int currentPlayer = 0;   // the index of the player in the player list
     private int tokensToWin = 0;
+    private Player playerSetJesterToken;
+    private Player playerWithJesterToken;
 
     public PlayerList() {
         this.players = new LinkedList<>();
@@ -163,13 +165,18 @@ public class PlayerList {
         int maxHand = -1;
         for (Player player : alivePlayers) {
             int hand = player.getHand().peek(0).value();
+            String handName = player.getHand().peek(0).name();
+            // Bishop can't beat Princess
+            if (handName.equalsIgnoreCase("Bishop") && maxHand == 8) {
+                continue;
+            }
             if (hand > maxHand) {
                 maxHand = hand;
                 winners.clear();
                 winners.add(player);
             } else if (hand == maxHand) {
                 winners.add(player);
-            } 
+            }
         }
         return winners;
     }
@@ -210,7 +217,9 @@ public class PlayerList {
 
     /**
      * Reset the beginning player at the beginning of a round
-     * @param
+     * 
+     * @param winner
+     *      the winner of last round
      * @return
      */
     public void setBeginner(Player winner) {
@@ -243,5 +252,34 @@ public class PlayerList {
             }
         }
         return num;
+
+    /**
+     * Set the Jester token for the given target
+     * 
+     * @param player 
+     *          the player who sets the Jester token
+     * @param target
+     *          the player who will get the Jester token
+     */
+    public void setJesterToken(Player player, Player target) {
+        this.playerSetJesterToken = player;
+        this.playerWithJesterToken = target;
+    }
+
+    /**
+     * Check whether the winner holds the Jester token
+     * 
+     * @param winners
+     *          a list of winners
+     * @return the player who set the Jester token, if the player who holds the Jester token is a winner
+     */
+    public Player checkWinnerForJesterToken(List<Player> winners) {
+        for (Player winner : winners) {
+            if (winner == playerWithJesterToken) {
+                return playerSetJesterToken;
+            }
+        }
+
+        return null;
     }
     }
