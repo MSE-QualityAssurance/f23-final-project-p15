@@ -162,7 +162,7 @@ abstract class GameActions {
         // choose player to look at
         System.out.println(opponent1.getName());
         System.out.println(opponent2.getName());
-        int pos = in.choosePlayer();
+        int pos = in.choosePlayerWhenCardinal();
         if (pos == 0) {
             System.out.println(opponent1.getName() + " shows you a " + opponent1.getHand().peek(0));
         } else if (pos == 1) {

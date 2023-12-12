@@ -79,12 +79,12 @@ public class Reader {
      * @param user
      *          If doesn't allow the user to choose himself, set as the user who is choosing the opponent
      *          Otherwise set as null
-     * @param chosen
+     * @param alreadyChosen
      *          If some player has already been chosen, set `chosen` as that player
      *          Otherwise set as null
      * @return The player chosen as opponent
      */
-    Player getOpponent(PlayerList playerList, Player user, Player chosen) {
+    Player getOpponent(PlayerList playerList, Player user, Player alreadyChosen) {
         Player opponent = null;
 
         while (true) {
@@ -104,7 +104,7 @@ public class Reader {
             } else if (user != null && opponent.getName().equals(user.getName())) {
                 System.out.println("You cannot target yourself");
 
-            } else if (chosen != null && opponent.getName().equals(chosen.getName())) {
+            } else if (alreadyChosen != null && opponent.getName().equals(alreadyChosen.getName())) {
                 System.out.println("You already chose that player");
 
             } else {
@@ -140,7 +140,7 @@ public class Reader {
      * Let player choose the player whose hand they want to look at
      * @return The index of the choosen player
      */
-    public int choosePlayer() {
+    public int choosePlayerWhenCardinal() {
         System.out.println();
         System.out.println("Please choose the player would you like to look at");
         System.out.printf("0 for first, 1 for second, press enter if you don't want to look at either of their hands: ");
