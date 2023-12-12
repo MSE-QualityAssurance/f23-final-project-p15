@@ -13,14 +13,12 @@ public class CardTestBaron {
      */
     @Test
     void testBaronUserWins() {
-        Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.PRIEST)));
-        Hand opponentHand = new Hand(new ArrayList<>(Arrays.asList(Card.GUARD)));
-
-        Player user = Mockito.mock(Player.class);
-        Player opponent = Mockito.mock(Player.class);
-
-        Mockito.when(user.getHand()).thenReturn(userHand);
-        Mockito.when(opponent.getHand()).thenReturn(opponentHand);
+        Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.KING)));
+        Hand opponentHand = new Hand(new ArrayList<>(Arrays.asList(Card.HANDMAIDEN)));
+        DiscardPile userDiscardPile = Mockito.mock(DiscardPile.class);
+        DiscardPile opponentDiscardPile = Mockito.mock(DiscardPile.class);
+        Player user = new Player("User", userHand, userDiscardPile);
+        Player opponent = new Player("Opponent", opponentHand, opponentDiscardPile);
 
         GameActions gameActions = new GameActions() {};
         gameActions.useBaron(user, opponent);
@@ -33,14 +31,12 @@ public class CardTestBaron {
      */
     @Test
     void testBaronOpponentWins(){
-        Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.PRIEST)));
+        Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.HANDMAIDEN)));
         Hand opponentHand = new Hand(new ArrayList<>(Arrays.asList(Card.KING)));
-
-        Player user = Mockito.mock(Player.class);
-        Player opponent = Mockito.mock(Player.class);
-
-        Mockito.when(user.getHand()).thenReturn(userHand);
-        Mockito.when(opponent.getHand()).thenReturn(opponentHand);
+        DiscardPile userDiscardPile = Mockito.mock(DiscardPile.class);
+        DiscardPile opponentDiscardPile = Mockito.mock(DiscardPile.class);
+        Player user = new Player("User", userHand, userDiscardPile);
+        Player opponent = new Player("Opponent", opponentHand, opponentDiscardPile);
 
         GameActions gameActions = new GameActions() {};
         gameActions.useBaron(user, opponent);
@@ -53,18 +49,15 @@ public class CardTestBaron {
      */
     @Test
     void testBaronTiesMock(){
-        Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.HANDMAIDEN)));
-        Hand opponentHand = new Hand(new ArrayList<>(Arrays.asList(Card.HANDMAIDEN)));
-
-        Player user = Mockito.mock(Player.class);
-        Player opponent = Mockito.mock(Player.class);
-
-        Mockito.when(user.getHand()).thenReturn(userHand);
-        Mockito.when(opponent.getHand()).thenReturn(opponentHand);
-
+        Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.KING)));
+        Hand opponentHand = new Hand(new ArrayList<>(Arrays.asList(Card.KING)));
+        DiscardPile userDiscardPile = Mockito.mock(DiscardPile.class);
+        DiscardPile opponentDiscardPile = Mockito.mock(DiscardPile.class);
+        Player user = new Player("User", userHand, userDiscardPile);
+        Player opponent = new Player("Opponent", opponentHand, opponentDiscardPile);
         GameActions gameActions = new GameActions() {};
         gameActions.useBaron(user, opponent);
-
-        Assertions.assertFalse(opponent.isAlive() && user.isAlive(), "Nothing happens");
+        Assertions.assertTrue(opponent.isAlive() && user.isAlive(), "Nothing happens");
     }
+
 }
