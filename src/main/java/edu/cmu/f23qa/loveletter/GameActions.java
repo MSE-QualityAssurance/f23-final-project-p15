@@ -25,6 +25,41 @@ abstract class GameActions {
     }
 
     /**
+     * Allows the user to guess a card that a player's hand contains.
+     * If the user is correct, the user gets a token, and the opponent may discard the revealed card and draw a new card.
+     * If the user is incorrect, the user is not affected.
+     * @param user
+     *          the initiator of the guessing
+     * @param in
+     *          the input stream
+     * @param opponent
+     *          the opponent
+     * @param d
+     *          the deck of cards
+     */
+    void useBishop(Player user, String guessedCard, Player opponent, Deck d, PlayerList players) {
+        Card opponentCard = opponent.getHand().peek(0);
+        if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
+            System.out.println("You have guessed correctly! You will now get a token!");
+            user.addToken();
+
+            // check if the game ends with this token
+            if (user.getTokens() == 4) {
+                System.out.println("You have won the game!");
+                // add a flag to show the game ends?
+                // or remove all players from the game but this user
+            }
+            
+            // discard the revealed card and draw a new card
+            opponent.getDiscarded().add(user.getHand().remove(0));
+            // opponent draws a new card from deck
+            opponent.getHand().add(d.draw());
+        } else {
+            System.out.println("You have guessed incorrectly.");
+        }
+    }
+
+    /**
      * Allows the user to peek at the card of an opposing player.
      * @param opponent
      *          the targeted player
