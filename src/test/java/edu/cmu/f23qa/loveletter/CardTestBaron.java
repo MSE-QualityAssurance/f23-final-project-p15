@@ -9,9 +9,7 @@ import org.mockito.Mockito;
 
 public class CardTestBaron {
     /*
-     * After drawing, I discard the Baron and choose  [normal player]. 
-     * My card is a Priest, and  [normal player] is a Guard. 
-     * Since my card has a higher value, the [normal player] is knocked out of the round.
+     * The case that the user beats the oponent in card comparison
      */
     @Test
     void testBaronUserWins() {
@@ -30,6 +28,9 @@ public class CardTestBaron {
         Assertions.assertFalse(opponent.isAlive(), "Opponent should be eliminated");
     }
 
+    /*
+     * The case that the oponent beats the user in card comparison
+     */
     @Test
     void testBaronOpponentWins(){
         Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.PRIEST)));
@@ -47,6 +48,9 @@ public class CardTestBaron {
         Assertions.assertFalse(user.isAlive(), "User should be eliminated");
     }
 
+    /*
+     * The case that the user and the oponent ties in card comparison
+     */
     @Test
     void testBaronTiesMock(){
         Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.HANDMAIDEN)));
