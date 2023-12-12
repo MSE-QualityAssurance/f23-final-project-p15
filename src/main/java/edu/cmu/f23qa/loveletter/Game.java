@@ -237,6 +237,8 @@ public class Game extends GameActions {
                 useQueen(user, opponent);
             case CARDINAL:
                 useCardinal(opponent, opponent2, in);
+            case CONSTABLE:
+                useConstable(players, user);
             case JESTER:
                 useJester(players, user, opponent);
             case BARONESS:
@@ -297,6 +299,12 @@ public class Game extends GameActions {
         Player playerSetJesterToken = players.checkWinnerForJesterToken(winners);
         if (playerSetJesterToken != null) {
             playerSetJesterToken.addToken();
+        }
+
+        // check whether the player who discarded Constable is alive
+        Player playerWithConstable = players.checkPlayerForConstableToken();
+        if (playerWithConstable!= null && !playerWithConstable.isAlive()) {
+            playerWithConstable.addToken();
         }
 
         // set the latest winner

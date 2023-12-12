@@ -238,6 +238,17 @@ abstract class GameActions {
     }
 
     /**
+     * If the Constable is played and when the player is out, he gets a token
+     * @param players
+     *      the list of all players
+     * @param user
+     *      the player who play the Constable
+     */
+    void useConstable (PlayerList players, Player user) {
+        players.setPlayerWithConstable(user);
+    }
+
+    /**
      * The player can inspect the hands of either one or two players
      * @param opponent1 
      *      One chosen player

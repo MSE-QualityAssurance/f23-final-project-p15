@@ -7,8 +7,9 @@ public class PlayerList {
     private LinkedList<Player> players;
     private int currentPlayer = 0;   // the index of the player in the player list
     private int tokensToWin = 0;
-    private Player playerSetJesterToken;
-    private Player playerWithJesterToken;
+    private Player playerSetJesterToken = null;
+    private Player playerWithJesterToken = null;
+    private Player playerWithConstable = null;
 
     public PlayerList() {
         this.players = new LinkedList<>();
@@ -56,13 +57,16 @@ public class PlayerList {
     }
 
     /**
-     * Resets all players within the list.
+     * Resets all players and other flag fields within the list at the beginning of each round.
      */
     public void reset() {
         for (Player p : players) {
             p.getHand().clear();
             p.getDiscarded().clear();
         }
+        this.playerSetJesterToken = null;
+        this.playerWithJesterToken = null;
+        this.playerWithConstable = null;
     }
 
     /**
@@ -282,5 +286,22 @@ public class PlayerList {
         }
 
         return null;
+    }
+
+    /**
+     * Set the playerWithConstable as who discarded the card
+     * @param player
+     *          he player who discarded the card
+     */
+    public void setPlayerWithConstable(Player player) {
+        this.playerWithConstable = player;
+    }
+
+    /**
+     * Return the player who discarded the card
+     * @return the player who discarded the card
+     */
+    public Player checkPlayerForConstableToken() {
+        return playerWithConstable;
     }
 }
