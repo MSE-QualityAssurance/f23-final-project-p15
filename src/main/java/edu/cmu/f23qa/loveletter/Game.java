@@ -206,6 +206,7 @@ public class Game extends GameActions {
         }
 
         // Handlers
+        // all cards go here execpt for countess, count    
         switch (card) {
             case GUARD:
                 String guessedCardOfGuard = in.pickCardWhenGuard();
@@ -226,7 +227,7 @@ public class Game extends GameActions {
             case KING:
                 useKing(user, opponent);
                 break;
-            case COUNTESS:
+            case PRINCESS:
                 usePrincess(user);
                 break;
             case BISHOP:
