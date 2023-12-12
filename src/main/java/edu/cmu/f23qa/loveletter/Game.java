@@ -151,11 +151,13 @@ public class Game extends GameActions {
         user.getDiscarded().add(card);
 
         // Get opponent
+        Player opponent = null;
+        Player opponent2 = null;
+
         List<Card> needOneOpponent = Arrays.asList(
             Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, 
             Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP);
       
-        Player opponent = null;
         if (needOneOpponent.contains(card)) {
             if (card == Card.PRINCE) {
                 if (players.getNumAvailablePlayers(null) < 1) {
@@ -172,7 +174,6 @@ public class Game extends GameActions {
             }
         }
 
-        Player opponent2 = null;
         if (card == Card.CARDINAL) {
             if (players.getNumAvailablePlayers(null) < 2) {
                 System.out.println("No enough players can be chosen");
@@ -180,6 +181,28 @@ public class Game extends GameActions {
             }
             opponent = in.getOpponent(players, null, null);
             opponent2 = in.getOpponent(players, null, opponent);
+        }
+
+        if (card == Card.BARONESS) {
+            int numAvailablePlayers = players.getNumAvailablePlayers(user);
+            // No available player, skip
+            if (numAvailablePlayers < 1) {
+                System.out.println("No enough players can be chosen");
+                return;
+
+            // One available player, choose one opponent
+            } else if (numAvailablePlayers == 1) {
+                System.out.println("Please choose the only player whose hand you want to inspect");
+                opponent = in.getOpponent(players, user, null);
+
+            // More than one players, choose one or two players
+            } else {
+                int numOpponents = in.getNumOpponents();
+                opponent = in.getOpponent(players, user, null);
+                if (numOpponents == 2) {
+                    opponent2 = in.getOpponent(players, user, opponent);
+                } 
+            }
         }
 
         // Handlers
@@ -218,6 +241,8 @@ public class Game extends GameActions {
                 useConstable(players, user);
             case JESTER:
                 useJester(players, user, opponent);
+            case BARONESS:
+                useBaroness(opponent, opponent2);
             default:
                 break;
         }

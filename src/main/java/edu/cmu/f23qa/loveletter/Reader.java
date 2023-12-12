@@ -191,4 +191,25 @@ public class Reader {
         System.out.print("Your choice: ");
         return in.nextInt();
     }
+
+    /**
+     * Choose the number of player's hands the user want to inspect for Baroness
+     * @return The number of opponents need to be chosen
+     */
+    public int getNumOpponents() {
+        int numOpponents;
+        
+        while (true) {
+            System.out.print("How many player's hands do you want to inspect (1 or 2): ");
+            numOpponents = in.nextInt();
+            in.nextLine();
+            if (numOpponents != 1 || numOpponents != 2) {
+                System.out.println("Invalid number");
+                continue;
+            } else {
+                break;
+            }
+        }
+        return numOpponents;   
+    }
 }

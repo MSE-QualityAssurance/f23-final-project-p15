@@ -247,4 +247,20 @@ abstract class GameActions {
     void useConstable (PlayerList players, Player user) {
         players.setPlayerWithConstable(user);
     }
+
+    /**
+     * The player can inspect the hands of either one or two players
+     * @param opponent1 
+     *      One chosen player
+     * @param opponent2
+     *      Another chosen player
+     */
+    void useBaroness(Player opponent1, Player opponent2) {
+        if (opponent1 != null) {
+            System.out.println(opponent1.getName() + " shows you a " + opponent1.getHand().peek(0));
+        } 
+        if (opponent2 != null) {
+            System.out.println(opponent2.getName() + " shows you a " + opponent2.getHand().peek(0));
+        } 
+    }
 }
