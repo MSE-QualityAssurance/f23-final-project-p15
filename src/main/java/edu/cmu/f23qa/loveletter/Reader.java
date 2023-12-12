@@ -72,56 +72,6 @@ public class Reader {
     }
 
     /**
-     * Choose opponent for cards requiring an opponent, allowing to target user itself
-     * @param playerList
-     *          The entire player list
-     * @return The player chosen as opponent
-     */
-    Player getOpponent(PlayerList playerList) {
-        Player opponent = null;
-
-        while (true) {
-            System.out.print("Who would you like to target: ");
-            String opponentName = in.nextLine();
-            opponent = playerList.getPlayer(opponentName);
-
-            if (opponent == null) {
-                System.out.println("This player is not in the game");
-
-            } else if (opponent.isProtected()) {
-                System.out.println("This player is protected by a handmaiden");
-
-            } else if (!opponent.isAlive()) {
-                System.out.println("This player is out of cards");
-
-            } else {
-                break;
-            }
-        }
-
-        return opponent;
-    }
-
-    /**
-     * Choose opponent for cards requiring an opponent, disallowing to target player itself
-     * @param playerList
-     *          The entire player list
-     * @param user
-     *          The player who is choosing the opponent
-     * @return The player chosen as opponent
-     */
-    Player getOpponentNotSelf(PlayerList playerList, Player user) {
-        Player opponent = getOpponent(playerList);
-
-        while (opponent.getName().equals(user.getName())) {
-            System.out.println("You cannot target yourself");
-            opponent = getOpponent(playerList);
-        }
-
-        return opponent;
-    }
-
-    /**
      * Choose opponent for cards requiring an opponent
      * 
      * @param playerList
