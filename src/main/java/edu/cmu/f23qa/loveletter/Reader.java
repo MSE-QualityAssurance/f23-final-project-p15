@@ -135,4 +135,28 @@ public class Reader {
             }
         }
     }
+
+    /**
+     * Let player choose the player whose hand they want to look at
+     * @return The index of the choosen player
+     */
+    public int choosePlayer() {
+        System.out.println();
+        System.out.println("Please choose the player would you like to look at");
+        System.out.printf("0 for first, 1 for second, press enter if you don't want to look at either of their hands: ");
+
+        String playerPos;
+        while (true) {
+            playerPos = in.nextLine();
+            if (playerPos == "") {
+                return -1;
+            }
+            if (!playerPos.equals("0") && !playerPos.equals("1")) {
+                System.out.println("Please enter a valid position");
+                continue;
+            } else {
+                return Integer.parseInt(playerPos);
+            }
+        }       
+    }    
 }

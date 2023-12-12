@@ -196,6 +196,8 @@ public class Game extends GameActions {
                 break;
             case QUEEN:
                 useQueen(user, opponent);
+            case CARDINAL:
+                useCardinal(opponent, opponent2, in);
             default:
                 break;
         }
