@@ -238,6 +238,8 @@ public class Game extends GameActions {
                 useCardinal(opponent, opponent2, in);
             case JESTER:
                 useJester(players, user, opponent);
+            case BARONESS:
+                useBaroness(opponent, opponent2);
             default:
                 break;
         }
