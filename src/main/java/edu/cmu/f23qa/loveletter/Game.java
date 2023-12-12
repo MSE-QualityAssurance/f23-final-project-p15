@@ -27,18 +27,18 @@ public class Game extends GameActions {
         this.in = in;
     }
 
-    // /**
-    //  * Public constructor for a Game object.
-    //  * @param in
-    //  * @param players
-    //  * @param deck
-    //  *          the input stream
-    //  */
-    // public Game(Reader in, PlayerList players, Deck deck) {
-    //     this.players = players;
-    //     this.deck = deck;
-    //     this.in = in;
-    // }
+    /**
+     * Public constructor for a Game object.
+     * @param in
+     * @param players
+     * @param deck
+     *          the input stream
+     */
+    public Game(Reader in, PlayerList players, Deck deck) {
+        this.players = players;
+        this.deck = deck;
+        this.in = in;
+    }
 
     /**
      * Sets up the players that make up the player list.
@@ -72,7 +72,7 @@ public class Game extends GameActions {
     }
 
     /**
-     * 
+     * Play one round
      */
     private void playRound() {
         while (players.getAlivePlayers().size() != 1 && deck.hasMoreCards()) {
@@ -151,8 +151,7 @@ public class Game extends GameActions {
         user.getDiscarded().add(card);
 
         // Get opponent
-        List<Card> needOpponent = Arrays.asList(Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING, Card.BISHOP);
-
+        List<Card> needOpponent = Arrays.asList(Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING, Card.QUEEN, Card.BISHOP);
         Player opponent = null;
         if (needOpponent.contains(card)) {
             if (card == Card.PRINCE) {
@@ -190,6 +189,8 @@ public class Game extends GameActions {
                 String guessedCardOfBishop = in.pickCardWhenBishop();
                 useBishop(user, guessedCardOfBishop, opponent, in, deck, players);
                 break;
+            case QUEEN:
+                useQueen(user, opponent);
             default:
                 break;
         }

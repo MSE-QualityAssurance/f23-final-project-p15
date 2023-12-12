@@ -13,13 +13,31 @@ abstract class GameActions {
      *          the input stream
      * @param opponent
      *          the targeted player
+     * @param user
+     *          the player who use the Guard card
+     * @param deck
+     *          the deck of cards
      */
-    void useGuard(String guessedCard, Player opponent) {
+    void useGuard(String guessedCard, Player opponent, Player user, Deck deck) {
         Card opponentCard = opponent.getHand().peek(0);
-        if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
+
+        // Effects of Assasin
+        if (opponentCard == Card.ASSASIN) {
+            System.out.println("The opponent held Assasin, you died!");
+            user.eliminate();
+            opponent.getHand().remove(0);       // there can only be one card in his hand at that time
+            opponent.getDiscarded().add(Card.ASSASIN);
+            if (deck.hasMoreCardsWithExtraCard()) {
+                opponent.getHand().add(deck.draw());
+            }
+        }
+
+        else if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
             System.out.println("You have guessed correctly!");
             opponent.eliminate();
-        } else {
+        } 
+        
+        else {
             System.out.println("You have guessed incorrectly");
         }
     }
@@ -111,6 +129,29 @@ abstract class GameActions {
     }
 
     /**
+     * Allows the user to compare cards with an opponent.
+     * If the user's card is of higher value, the opposing player wins the round and their card.
+     * If the user's card is of lower value, the user wins the round and their card.
+     * @param user
+     *          the initiator of the comparison
+     * @param opponent
+     *         the targeted player
+     */
+    void useQueen(Player user, Player opponent) {
+        Card userCard = user.getHand().peek(0);
+        Card opponentCard = opponent.getHand().peek(0);
+
+        int cardComparison = Integer.compare(userCard.value(), opponentCard.value());
+        if (cardComparison > 0) {
+            System.out.println("You have lost the comparison!");
+            user.eliminate();
+        } else if (cardComparison < 0) {
+            System.out.println("You have won the comparison");
+            opponent.eliminate();
+        }
+    }
+
+    /**
      * Switches the user's protection for one turn. This protects them from being targeted.
      * @param user
      *          the current player
@@ -129,7 +170,7 @@ abstract class GameActions {
      */
     void usePrince(Player opponent, Deck d) {
         opponent.eliminate();
-        if (d.hasMoreCardsForPrince()) {
+        if (d.hasMoreCardsWithExtraCard()) {
             opponent.getHand().add(d.draw());
         }
     }
