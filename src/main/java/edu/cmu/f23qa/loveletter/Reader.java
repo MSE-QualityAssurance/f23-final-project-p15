@@ -122,6 +122,50 @@ public class Reader {
     }
 
     /**
+     * Choose opponent for cards requiring an opponent
+     * 
+     * @param playerList
+     *          The entire player list
+     * @param user
+     *          If doesn't allow the user to choose himself, set as the user who is choosing the opponent
+     *          Otherwise set as null
+     * @param chosen
+     *          If some player has already been chosen, set `chosen` as that player
+     *          Otherwise set as null
+     * @return The player chosen as opponent
+     */
+    Player getOpponent(PlayerList playerList, Player user, Player chosen) {
+        Player opponent = null;
+
+        while (true) {
+            System.out.print("Who would you like to target: ");
+            String opponentName = in.nextLine();
+            opponent = playerList.getPlayer(opponentName);
+
+            if (opponent == null) {
+                System.out.println("This player is not in the game");
+
+            } else if (opponent.isProtected()) {
+                System.out.println("This player is protected by a handmaiden");
+
+            } else if (!opponent.isAlive()) {
+                System.out.println("This player is out of cards");
+
+            } else if (user != null && opponent.getName().equals(user.getName())) {
+                System.out.println("You cannot target yourself");
+
+            } else if (chosen != null && opponent.getName().equals(chosen.getName())) {
+                System.out.println("You already chose that player");
+
+            } else {
+                break;
+            }
+        }
+
+        return opponent;
+    }
+
+    /**
      * Pick the card players want to guess when they use the "Guard" card
      * @return The card the player wants to guess
      */

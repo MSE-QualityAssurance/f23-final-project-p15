@@ -146,9 +146,9 @@ public class Game extends GameActions {
         Player opponent = null;
         if (needOpponent.contains(card)) {
             if (card == Card.PRINCE) {
-                opponent = in.getOpponent(players);
+                opponent = in.getOpponent(players, null, null);
             } else {
-                opponent = in.getOpponentNotSelf(players, user);
+                opponent = in.getOpponent(players, user, null);
             }
         }
 
