@@ -235,14 +235,19 @@ public class Game extends GameActions {
                 break;
             case QUEEN:
                 useQueen(user, opponent);
+                break;
             case CARDINAL:
                 useCardinal(opponent, opponent2, in);
+                break;
             case CONSTABLE:
                 useConstable(players, user);
+                break;
             case JESTER:
                 useJester(players, user, opponent);
+                break;
             case BARONESS:
                 useBaroness(opponent, opponent2);
+                break;
             default:
                 break;
         }

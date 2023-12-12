@@ -46,14 +46,15 @@ public class PlayerList {
     }
 
     /**
-     * Gets the first player in the list and adds them to end of the list.
+     * Get the player for current turn and update the currentPlayer
      *
-     * @return the first player in the list
+     * @return the player for current tur
      */
     public Player getCurrentPlayer() {
-        int pre = currentPlayer;
+        Player player = players.get(currentPlayer);
         currentPlayer = (currentPlayer + 1) % players.size();
-        return players.get(pre);
+
+        return player;
     }
 
     /**

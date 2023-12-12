@@ -203,7 +203,7 @@ public class Reader {
             System.out.print("How many player's hands do you want to inspect (1 or 2): ");
             numOpponents = in.nextInt();
             in.nextLine();
-            if (numOpponents != 1 || numOpponents != 2) {
+            if (numOpponents != 1 && numOpponents != 2) {
                 System.out.println("Invalid number");
                 continue;
             } else {
