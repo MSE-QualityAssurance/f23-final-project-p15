@@ -192,6 +192,7 @@ public class Game extends GameActions {
 
             // One available player, choose one opponent
             } else if (numAvailablePlayers == 1) {
+                System.out.println("Please choose the only player whose hand you want to inspect");
                 opponent = in.getOpponent(players, user, null);
 
             // More than one players, choose one or two players
