@@ -252,6 +252,7 @@ public class PlayerList {
             }
         }
         return num;
+    }
 
     /**
      * Set the Jester token for the given target
@@ -282,4 +283,4 @@ public class PlayerList {
 
         return null;
     }
-    }
+}
