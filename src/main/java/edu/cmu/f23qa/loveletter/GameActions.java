@@ -147,4 +147,19 @@ abstract class GameActions {
         user.eliminate();
     }
 
+    /**
+     * If the Jester is played, a Jester token is given to the chosen player
+     * If that player winds the round, the user gain a Token of Affection. 
+     * 
+     * @param players
+     *      the list of all players
+     * @para user
+     *      the player who play the Jester
+     * @para target
+     *      the chosen player which the Jester will have effect on
+     */
+    void useJester(PlayerList players, Player user, Player target) {
+        players.setJesterToken(user, target);
+    }
+
 }

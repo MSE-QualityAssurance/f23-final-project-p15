@@ -141,8 +141,9 @@ public class Game extends GameActions {
         user.getDiscarded().add(card);
 
         // Get opponent
-        List<Card> needOpponent = Arrays.asList(Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING, Card.QUEEN);
-        
+        List<Card> needOpponent = Arrays.asList(
+            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING, Card.QUEEN, Card.JESTER);
+
         Player opponent = null;
         if (needOpponent.contains(card)) {
             if (card == Card.PRINCE) {
@@ -178,6 +179,8 @@ public class Game extends GameActions {
                 break;
             case QUEEN:
                 useQueen(user, opponent);
+            case JESTER:
+                useJester(players, user, opponent);
             default:
                 break;
         }
@@ -206,24 +209,37 @@ public class Game extends GameActions {
     private List<Player> checkForRoundWinner() {
         List<Player> winners = new ArrayList<Player>();
         List<Player> alivePlayers = players.getAlivePlayers();
+
         // only one player alive, this round ends and he becomes the winner
         if (alivePlayers.size() == 1) {
             winners = alivePlayers;
         }
+
         // multiple players alive, check their hands
         else {
             List<Player> winnersAfterCmpHands = players.compareHand(alivePlayers);
             if (winnersAfterCmpHands.size() == 1) {
                 winners = winnersAfterCmpHands;
-            } else {
+            } 
+            
+            // all alive players have the same value in hand, check their discard piles
+            else {
                 winners = players.compareUsedPiles(winnersAfterCmpHands);
             }
         }
 
+        // add token of affection for each winner
         for (Player winner : winners) {
             winner.addToken();
         }
 
+        // check whether winners have Jester token 
+        Player playerSetJesterToken = players.checkWinnerForJesterToken(winners);
+        if (playerSetJesterToken != null) {
+            playerSetJesterToken.addToken();
+        }
+
+        // set the latest winner
         lastRoundWinner = winners.get(0);
 
         return winners;
