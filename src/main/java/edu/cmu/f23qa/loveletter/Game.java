@@ -141,8 +141,7 @@ public class Game extends GameActions {
         user.getDiscarded().add(card);
 
         // Get opponent
-        List<Card> needOpponent = Arrays.asList(Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING);
-        // to add later: Card.QUEEN
+        List<Card> needOpponent = Arrays.asList(Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING, Card.QUEEN);
         
         Player opponent = null;
         if (needOpponent.contains(card)) {
