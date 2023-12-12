@@ -85,7 +85,7 @@ public class Deck {
      * @return true if the deck is not empty, or it's empty but the removed card has not been used yet; 
      * false if the deck is empty and the removed card has been used
      */
-    public boolean hasMoreCardsForPrince() {
+    public boolean hasMoreCardsWithExtraCard() {
         if (deck.isEmpty() && !removedCardUsed) {
             removedCardUsed = true;
             deck.push(initiallyRemovedCard);

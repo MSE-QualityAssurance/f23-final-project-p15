@@ -13,13 +13,31 @@ abstract class GameActions {
      *          the input stream
      * @param opponent
      *          the targeted player
+     * @param user
+     *          the player who use the Guard card
+     * @param deck
+     *          the deck of cards
      */
-    void useGuard(String guessedCard, Player opponent) {
+    void useGuard(String guessedCard, Player opponent, Player user, Deck deck) {
         Card opponentCard = opponent.getHand().peek(0);
-        if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
+
+        // Effects of Assasin
+        if (opponentCard == Card.ASSASIN) {
+            System.out.println("The opponent held Assasin, you died!");
+            user.eliminate();
+            opponent.getHand().remove(0);       // there can only be one card in his hand at that time
+            opponent.getDiscarded().add(Card.ASSASIN);
+            if (deck.hasMoreCardsWithExtraCard()) {
+                opponent.getHand().add(deck.draw());
+            }
+        }
+
+        else if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
             System.out.println("You have guessed correctly!");
             opponent.eliminate();
-        } else {
+        } 
+        
+        else {
             System.out.println("You have guessed incorrectly");
         }
     }
@@ -100,7 +118,7 @@ abstract class GameActions {
      */
     void usePrince(Player opponent, Deck d) {
         opponent.eliminate();
-        if (d.hasMoreCardsForPrince()) {
+        if (d.hasMoreCardsWithExtraCard()) {
             opponent.getHand().add(d.draw());
         }
     }
