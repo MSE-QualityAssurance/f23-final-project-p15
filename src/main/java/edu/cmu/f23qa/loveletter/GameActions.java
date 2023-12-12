@@ -236,4 +236,15 @@ abstract class GameActions {
     void useJester(PlayerList players, Player user, Player target) {
         players.setJesterToken(user, target);
     }
+
+    /**
+     * If the Constable is played and when the player is out, he gets a token
+     * @param players
+     *      the list of all players
+     * @param user
+     *      the player who play the Constable
+     */
+    void useConstable (PlayerList players, Player user) {
+        players.setPlayerWithConstable(user);
+    }
 }
