@@ -57,13 +57,16 @@ public class PlayerList {
     }
 
     /**
-     * Resets all players within the list.
+     * Resets all players and other flag fields within the list at the beginning of each round.
      */
     public void reset() {
         for (Player p : players) {
             p.getHand().clear();
             p.getDiscarded().clear();
         }
+        this.playerSetJesterToken = null;
+        this.playerWithJesterToken = null;
+        this.playerWithConstable = null;
     }
 
     /**
