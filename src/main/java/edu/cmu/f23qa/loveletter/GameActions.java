@@ -200,6 +200,29 @@ abstract class GameActions {
     }
 
     /**
+     * Choose exactly 2 players who will switch hands. 
+     * The player may look at one of them without revealing it to any other players.
+     * @param opponent1
+     *      One of the chosen player
+     * @param opponent2
+     *      Another chosen player
+     */
+    void useCardinal(Player opponent1, Player opponent2, Reader in) {
+        // switch hand
+        opponent1.switchHand(opponent2);
+
+        // choose player to look at
+        System.out.println(opponent1.getName());
+        System.out.println(opponent2.getName());
+        int pos = in.choosePlayerWhenCardinal();
+        if (pos == 0) {
+            System.out.println(opponent1.getName() + " shows you a " + opponent1.getHand().peek(0));
+        } else if (pos == 1) {
+            System.out.println(opponent2.getName() + " shows you a " + opponent2.getHand().peek(0));
+        }
+    }
+
+    /**
      * If the Jester is played, a Jester token is given to the chosen player
      * If that player winds the round, the user gain a Token of Affection. 
      * 
@@ -213,5 +236,4 @@ abstract class GameActions {
     void useJester(PlayerList players, Player user, Player target) {
         players.setJesterToken(user, target);
     }
-
 }

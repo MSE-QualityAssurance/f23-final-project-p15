@@ -50,6 +50,17 @@ public class Player {
         this.isProtected = !this.isProtected;
     }
 
+    /**
+     * Switch two players' hands
+     * @param p
+     *      One of the player
+     */
+    public void switchHand(Player p) {
+        Hand temp = this.hand;
+        this.hand = p.hand;
+        p.hand = temp;
+    }
+
     public Hand getHand() {
         return this.hand;
     }

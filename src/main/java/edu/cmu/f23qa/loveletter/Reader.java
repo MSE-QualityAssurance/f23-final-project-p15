@@ -72,12 +72,19 @@ public class Reader {
     }
 
     /**
-     * Choose opponent for cards requiring an opponent, allowing to target user itself
+     * Choose opponent for cards requiring an opponent
+     * 
      * @param playerList
      *          The entire player list
+     * @param user
+     *          If doesn't allow the user to choose himself, set as the user who is choosing the opponent
+     *          Otherwise set as null
+     * @param alreadyChosen
+     *          If some player has already been chosen, set `chosen` as that player
+     *          Otherwise set as null
      * @return The player chosen as opponent
      */
-    public Player getOpponent(PlayerList playerList) {
+    public Player getOpponent(PlayerList playerList, Player user, Player alreadyChosen) {
         Player opponent = null;
 
         while (true) {
@@ -94,28 +101,15 @@ public class Reader {
             } else if (!opponent.isAlive()) {
                 System.out.println("This player is out of cards");
 
+            } else if (user != null && opponent.getName().equals(user.getName())) {
+                System.out.println("You cannot target yourself");
+
+            } else if (alreadyChosen != null && opponent.getName().equals(alreadyChosen.getName())) {
+                System.out.println("You already chose that player");
+
             } else {
                 break;
             }
-        }
-
-        return opponent;
-    }
-
-    /**
-     * Choose opponent for cards requiring an opponent, disallowing to target player itself
-     * @param playerList
-     *          The entire player list
-     * @param user
-     *          The player who is choosing the opponent
-     * @return The player chosen as opponent
-     */
-    public Player getOpponentNotSelf(PlayerList playerList, Player user) {
-        Player opponent = getOpponent(playerList);
-
-        while (opponent.getName().equals(user.getName())) {
-            System.out.println("You cannot target yourself");
-            opponent = getOpponent(playerList);
         }
 
         return opponent;
@@ -141,6 +135,30 @@ public class Reader {
             }
         }
     }
+
+    /**
+     * Let player choose the player whose hand they want to look at
+     * @return The index of the choosen player
+     */
+    public int choosePlayerWhenCardinal() {
+        System.out.println();
+        System.out.println("Please choose the player would you like to look at");
+        System.out.printf("0 for first, 1 for second, press enter if you don't want to look at either of their hands: ");
+
+        String playerPos;
+        while (true) {
+            playerPos = in.nextLine();
+            if (playerPos == "") {
+                return -1;
+            }
+            if (!playerPos.equals("0") && !playerPos.equals("1")) {
+                System.out.println("Please enter a valid position");
+                continue;
+            } else {
+                return Integer.parseInt(playerPos);
+            }
+        }       
+    }    
 
     /**
      * Pick the card number players want to guess when they use the "Bishop" card

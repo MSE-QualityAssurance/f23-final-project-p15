@@ -154,14 +154,32 @@ public class Game extends GameActions {
         List<Card> needOpponent = Arrays.asList(
             Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, 
             Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP);
-
+      
         Player opponent = null;
-        if (needOpponent.contains(card)) {
+        if (needOneOpponent.contains(card)) {
             if (card == Card.PRINCE) {
-                opponent = in.getOpponent(players);
+                if (players.getNumAvailablePlayers(null) < 1) {
+                    System.out.println("No enough players can be chosen");
+                    return;
+                }
+                opponent = in.getOpponent(players, null, null);
             } else {
-                opponent = in.getOpponentNotSelf(players, user);
+                if (players.getNumAvailablePlayers(user) < 1) {
+                    System.out.println("No enough players can be chosen");
+                    return;
+                }
+                opponent = in.getOpponent(players, user, null);
             }
+        }
+
+        Player opponent2 = null;
+        if (card == Card.CARDINAL) {
+            if (players.getNumAvailablePlayers(null) < 2) {
+                System.out.println("No enough players can be chosen");
+                return;
+            }
+            opponent = in.getOpponent(players, null, null);
+            opponent2 = in.getOpponent(players, null, opponent);
         }
 
         // Handlers
@@ -194,6 +212,8 @@ public class Game extends GameActions {
                 break;
             case QUEEN:
                 useQueen(user, opponent);
+            case CARDINAL:
+                useCardinal(opponent, opponent2, in);
             case JESTER:
                 useJester(players, user, opponent);
             default:

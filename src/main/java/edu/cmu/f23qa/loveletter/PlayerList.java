@@ -237,6 +237,23 @@ public class PlayerList {
     }
 
     /**
+     * Return the number of players available for choosing
+     * 
+     * @param exceptPlayer
+     *          extra player who is not allowed to be targeted, e.g. the player who is going to choose opponent
+     *          null if no such requirement
+     * @return the number of available players
+     */
+    public int getNumAvailablePlayers(Player exceptPlayer) {
+        int num = 0;
+        for (Player p : players) {
+            if (p.isAlive() && !p.isProtected() && p != exceptPlayer) {
+                num++;
+            }
+        }
+        return num;
+
+    /**
      * Set the Jester token for the given target
      * 
      * @param player 
