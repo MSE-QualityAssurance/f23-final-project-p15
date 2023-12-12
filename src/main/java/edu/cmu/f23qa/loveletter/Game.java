@@ -53,12 +53,11 @@ public class Game extends GameActions {
      * The main game loop.
      */
     public void start() {
-        while (players.getGameWinner().size() != 1) {
+        while (!checkIfGameEnds()) {
             setUpRound();
             playRound();
-            checkIfGameEnds();
-        } // end of game
-
+        } 
+        // end of game
     }
 
     /**
@@ -100,6 +99,10 @@ public class Game extends GameActions {
                     playCard(getCard(turn), turn);
                 }
             }
+            // check if the game already ends
+            if (checkIfGameEnds()) {
+                break;
+            }
             // check if the round ends
             checkForRoundWinner();
         }
@@ -107,15 +110,22 @@ public class Game extends GameActions {
 
     /**
      * Check if the game ends
+     * @return true if the game ends, false if not
      */ 
-    private void checkIfGameEnds() {
+    private boolean checkIfGameEnds() {
         List<Player> gameWinners = players.getGameWinner();
-        if (gameWinners.size() == 1) {
+        if (gameWinners.size() == 0) {
+            return false;
+        }
+        else if (gameWinners.size() == 1) {
             System.out.println(gameWinners.get(0) + " has won the game and the heart of the princess!");
+            return true;
         }
         // in case of a tie
-        else if (gameWinners.size() > 1) {
+        // when gameWinners.size() > 1
+        else{
             System.out.println("It's a tie! Let's play one more round!");
+            return false;
         }
     }
 
@@ -142,7 +152,8 @@ public class Game extends GameActions {
 
         // Get opponent
         List<Card> needOpponent = Arrays.asList(
-            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, Card.KING, Card.QUEEN, Card.JESTER);
+            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, 
+            Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP);
 
         Player opponent = null;
         if (needOpponent.contains(card)) {
@@ -156,8 +167,8 @@ public class Game extends GameActions {
         // Handlers
         switch (card) {
             case GUARD:
-                String guessedCard = in.pickCardWhenGuard();
-                useGuard(guessedCard, opponent, user, deck);
+                String guessedCardOfGuard = in.pickCardWhenGuard();
+                useGuard(guessedCardOfGuard, opponent, user, deck);
                 break;
             case PRIEST:
                 usePriest(opponent);
@@ -176,6 +187,10 @@ public class Game extends GameActions {
                 break;
             case COUNTESS:
                 usePrincess(user);
+                break;
+            case BISHOP:
+                int guessedCardOfBishop = in.pickCardNumberWhenBishop();
+                useBishop(user, guessedCardOfBishop, opponent, in, deck, players);
                 break;
             case QUEEN:
                 useQueen(user, opponent);
