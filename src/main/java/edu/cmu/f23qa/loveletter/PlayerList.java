@@ -163,13 +163,18 @@ public class PlayerList {
         int maxHand = -1;
         for (Player player : alivePlayers) {
             int hand = player.getHand().peek(0).value();
+            String handName = player.getHand().peek(0).name();
+            // Bishop can't beat Princess
+            if (handName.equalsIgnoreCase("Bishop") && maxHand == 8) {
+                continue;
+            }
             if (hand > maxHand) {
                 maxHand = hand;
                 winners.clear();
                 winners.add(player);
             } else if (hand == maxHand) {
                 winners.add(player);
-            } 
+            }
         }
         return winners;
     }

@@ -30,14 +30,18 @@ abstract class GameActions {
      * If the user is incorrect, the user is not affected.
      * @param user
      *          the initiator of the guessing
-     * @param in
-     *          the input stream
+     * @param guessedCard
+     *          the card that the user guesses
      * @param opponent
      *          the opponent
+     * @param in
+     *          the input stream
      * @param d
      *          the deck of cards
+     * @param players
+     *          the players in the game
      */
-    void useBishop(Player user, String guessedCard, Player opponent, Deck d, PlayerList players) {
+    void useBishop(Player user, String guessedCard, Player opponent, Reader in, Deck d, PlayerList players) {
         Card opponentCard = opponent.getHand().peek(0);
         if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
             System.out.println("You have guessed correctly! You will now get a token!");
@@ -46,15 +50,28 @@ abstract class GameActions {
             // check if the game ends with this token
             if (user.getTokens() == 4) {
                 System.out.println("You have won the game!");
-                // add a flag to show the game ends?
-                // or remove all players from the game but this user
+                return;
             }
             
-            // discard the revealed card and draw a new card
-            opponent.getDiscarded().add(user.getHand().remove(0));
-            // opponent draws a new card from deck
-            opponent.getHand().add(d.draw());
-        } else {
+            System.out.println();
+            System.out.println("To player " + opponent.getName() + ", would you like to discard the revealed card and draw a new card?");
+            // when 0, the opponent wants to discard the revealed card and draw a new card
+            if (in.drawWhenBishop() == 0) {
+                System.out.println("You have discarded a " + opponentCard);
+                opponent.getDiscarded().add(opponent.getHand().remove(0));
+                // check if the deck is empty
+                if (d.hasMoreCards()) {
+                    opponent.getHand().add(d.draw());
+                    System.out.println("You have drawn a " + opponent.getHand().peek(0));
+                    return;
+                }
+                else {
+                    System.out.println("The deck is empty! You are out for this round!");
+                }
+            }
+            
+        }
+        else {
             System.out.println("You have guessed incorrectly.");
         }
     }
