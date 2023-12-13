@@ -89,4 +89,52 @@ public class GameTest {
 
         assertFalse(game.checkIfGameEnds(), "Game should not end when there's a tie");
     }
+
+    /**
+     * Test for pick a card from the player's hand to play in this turn
+     * when the player hold the Countess and Price together
+     */
+    @Test
+    public void testGetCardCountessPince() {
+        // Create input
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(Card.COUNTESS, Card.PRINCE)));
+        Player user = new Player("U1", hand, mockDiscardPile1);
+
+        // Assert output
+        Card card = game.getCard(user);
+        assertEquals(Card.COUNTESS, card);
+    }
+
+    /**
+     * Test for pick a card from the player's hand to play in this turn
+     * when the player hold the Countess and King together
+     */
+    @Test
+    public void testGetCardKingCountess() {
+        // Create input
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(Card.KING, Card.COUNTESS)));
+        Player user = new Player("U1", hand, mockDiscardPile1);
+
+        // Assert output
+        Card card = game.getCard(user);
+        assertEquals(Card.COUNTESS, card);
+    }
+
+    /**
+     * Test for pick a card from the player's hand to play in this turn
+     * when the player hold the Countess but not no King or Prince
+     */
+    @Test
+    public void testGetCardCountessOther() {
+        // Create input
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(Card.GUARD, Card.COUNTESS)));
+        Player user = new Player("U1", hand, mockDiscardPile1);
+
+        // Define mock behavior
+        when(mockReader.getCard()).thenReturn(0);
+
+        // Assert output
+        Card card = game.getCard(user);
+        assertEquals(Card.GUARD, card);
+    }
 }

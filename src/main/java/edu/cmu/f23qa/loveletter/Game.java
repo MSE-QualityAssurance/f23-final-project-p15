@@ -330,7 +330,7 @@ public class Game extends GameActions {
      *
      * @return the chosen card
      */
-    private Card getCard(Player user) {
+    public Card getCard(Player user) {
         // Check if the user holds Countess as well as King or Prince
         int royaltyPos = user.getHand().royaltyPos();
         if (royaltyPos != -1) {
