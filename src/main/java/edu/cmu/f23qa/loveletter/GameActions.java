@@ -18,7 +18,7 @@ abstract class GameActions {
      * @param deck
      *          the deck of cards
      */
-    void useGuard(String guessedCard, Player opponent, Player user, Deck deck) {
+    void useGuard(int guessedCard, Player opponent, Player user, Deck deck) {
         Card opponentCard = opponent.getHand().peek(0);
         // Effects of Assasin
         if (opponentCard == Card.ASSASIN) {
@@ -31,10 +31,10 @@ abstract class GameActions {
             }
         }
         
-        else if (opponentCard.getName().equalsIgnoreCase(guessedCard)) {
+        else if (opponentCard.value() == guessedCard) {
             System.out.println("You have guessed correctly!");
             opponent.eliminate();
-        } 
+        }
         
         else {
             System.out.println("You have guessed incorrectly");

@@ -267,7 +267,12 @@ public class Game extends GameActions {
         // all cards go here execpt for countess, count    
         switch (card) {
             case GUARD:
-                String guessedCardOfGuard = in.pickCardWhenGuard();
+                boolean ifPremium = false;
+                if (players.getNumPlayers() >= 5) {
+                    ifPremium = true;
+                }
+                
+                int guessedCardOfGuard = in.pickCardNumberWhenGuard(ifPremium);
                 useGuard(guessedCardOfGuard, opponent, user, deck);
                 break;
             case PRIEST:
