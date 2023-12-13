@@ -215,10 +215,9 @@ public class PlayerList {
     }
 
     /**
-     * Returns the player with the highest used pile value.
+     * Returns the list of players with the highest used pile value.
      *
-     * @return the player with the highest used pile value; 
-     *         or null if there is a tie
+     * @return the list of players with the highest used pile value
      */
     public List<Player> compareUsedPiles(List<Player> winnersAfterCmpHands) {
         List<Player> winners = new ArrayList<>();
