@@ -18,12 +18,12 @@ public class PlayerListTest {
     @Test
     public void testSetTokensToWinValidPlayers() {
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
 
         // Create input
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
 
          // Verify results
         PlayerList playerList = new PlayerList(players);
@@ -36,10 +36,10 @@ public class PlayerListTest {
     @Test
     public void testSetTokensToWinInvalidPlayers() {
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
+        Player mockPlayer1 = mock(Player.class);
 
         // Create input
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1));
         PlayerList playerList = new PlayerList(players);
         
          // Verify results
@@ -77,17 +77,17 @@ public class PlayerListTest {
     @Test
     public void testGetCurrentPlayer() {
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
 
         // Create input
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
         PlayerList playerList = new PlayerList(players);
 
          // Verify results
         playerList.currentPlayer = 2;
-        Assertions.assertEquals(playerList.getCurrentPlayer(), spyPlayer3);
+        Assertions.assertEquals(playerList.getCurrentPlayer(), mockPlayer3);
         Assertions.assertEquals(playerList.currentPlayer, 0);
     }
 
@@ -97,19 +97,19 @@ public class PlayerListTest {
     @Test
     public void testGetAlivePlayer() {
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
 
         // Create input
-        when(spyPlayer1.isAlive()).thenReturn(true);
-        when(spyPlayer2.isAlive()).thenReturn(false);
-        when(spyPlayer3.isAlive()).thenReturn(true);
+        when(mockPlayer1.isAlive()).thenReturn(true);
+        when(mockPlayer2.isAlive()).thenReturn(false);
+        when(mockPlayer3.isAlive()).thenReturn(true);
 
          // Verify results
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
         PlayerList playerList = new PlayerList(players);
-        List<Player> expectedWinners = new ArrayList<>(Arrays.asList(spyPlayer1, spyPlayer3));
+        List<Player> expectedWinners = new ArrayList<>(Arrays.asList(mockPlayer1, mockPlayer3));
         Assertions.assertEquals(playerList.getAlivePlayers(), expectedWinners);
     }
 
@@ -119,19 +119,19 @@ public class PlayerListTest {
     @Test
     public void testGetWinner() {
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
 
         // Create input
-        when(spyPlayer1.getTokens()).thenReturn(5);
-        when(spyPlayer2.getTokens()).thenReturn(5);
-        when(spyPlayer3.getTokens()).thenReturn(4);
+        when(mockPlayer1.getTokens()).thenReturn(5);
+        when(mockPlayer2.getTokens()).thenReturn(5);
+        when(mockPlayer3.getTokens()).thenReturn(4);
 
          // Verify results
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
         PlayerList playerList = new PlayerList(players);
-        List<Player> expectedWinners = new ArrayList<>(Arrays.asList(spyPlayer1, spyPlayer2));
+        List<Player> expectedWinners = new ArrayList<>(Arrays.asList(mockPlayer1, mockPlayer2));
         Assertions.assertEquals(playerList.getGameWinner(), expectedWinners);
     }
 
@@ -151,19 +151,19 @@ public class PlayerListTest {
         Hand hand3 = new Hand(new ArrayList<>());
 
         // Create input
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
-        when(spyPlayer1.getHand()).thenReturn(hand1);
-        when(spyPlayer2.getHand()).thenReturn(hand2);
-        when(spyPlayer3.getHand()).thenReturn(hand3);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
+        when(mockPlayer1.getHand()).thenReturn(hand1);
+        when(mockPlayer2.getHand()).thenReturn(hand2);
+        when(mockPlayer3.getHand()).thenReturn(hand3);
 
          // Verify results
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
         PlayerList playerList = new PlayerList(players);
         Hand expecteHand = new Hand(new ArrayList<>(Arrays.asList(Card.BARON)));
         playerList.dealCards(deck);
-        Assertions.assertEquals(spyPlayer1.getHand().peek(0), expecteHand.peek(0));       
+        Assertions.assertEquals(mockPlayer1.getHand().peek(0), expecteHand.peek(0));       
     }
 
     /**
@@ -294,22 +294,22 @@ public class PlayerListTest {
     @Test
     public void testNumAvailablePlayersHasInput(){
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
-        when(spyPlayer1.isAlive()).thenReturn(true);
-        when(spyPlayer2.isAlive()).thenReturn(true);
-        when(spyPlayer3.isAlive()).thenReturn(true);
-        when(spyPlayer1.isProtected()).thenReturn(false);
-        when(spyPlayer2.isProtected()).thenReturn(false);
-        when(spyPlayer3.isProtected()).thenReturn(false);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
+        when(mockPlayer1.isAlive()).thenReturn(true);
+        when(mockPlayer2.isAlive()).thenReturn(true);
+        when(mockPlayer3.isAlive()).thenReturn(true);
+        when(mockPlayer1.isProtected()).thenReturn(false);
+        when(mockPlayer2.isProtected()).thenReturn(false);
+        when(mockPlayer3.isProtected()).thenReturn(false);
 
         // Create input
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
         PlayerList playerList = new PlayerList(players);
 
         // Verify results
-        int num = playerList.getNumAvailablePlayers(spyPlayer1);
+        int num = playerList.getNumAvailablePlayers(mockPlayer1);
         assertEquals(num, 2);
     }
 
@@ -319,18 +319,18 @@ public class PlayerListTest {
     @Test
     public void testNumAvailablePlayersNullInput(){
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
-        when(spyPlayer1.isAlive()).thenReturn(true);
-        when(spyPlayer2.isAlive()).thenReturn(true);
-        when(spyPlayer3.isAlive()).thenReturn(true);
-        when(spyPlayer1.isProtected()).thenReturn(false);
-        when(spyPlayer2.isProtected()).thenReturn(false);
-        when(spyPlayer3.isProtected()).thenReturn(false);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
+        when(mockPlayer1.isAlive()).thenReturn(true);
+        when(mockPlayer2.isAlive()).thenReturn(true);
+        when(mockPlayer3.isAlive()).thenReturn(true);
+        when(mockPlayer1.isProtected()).thenReturn(false);
+        when(mockPlayer2.isProtected()).thenReturn(false);
+        when(mockPlayer3.isProtected()).thenReturn(false);
 
         // Create input
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
         PlayerList playerList = new PlayerList(players);
 
         // Verify results
@@ -345,18 +345,18 @@ public class PlayerListTest {
     @Test
     public void testNumAvailablePlayersDeadProtected(){
         // Create test double and define its behavior
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
-        when(spyPlayer1.isAlive()).thenReturn(false);
-        when(spyPlayer2.isAlive()).thenReturn(true);
-        when(spyPlayer3.isAlive()).thenReturn(true);
-        when(spyPlayer1.isProtected()).thenReturn(false);
-        when(spyPlayer2.isProtected()).thenReturn(true);
-        when(spyPlayer3.isProtected()).thenReturn(false);
+        Player mockPlayer1 = mock(Player.class);
+        Player mockPlayer2 = mock(Player.class);
+        Player mockPlayer3 = mock(Player.class);
+        when(mockPlayer1.isAlive()).thenReturn(false);
+        when(mockPlayer2.isAlive()).thenReturn(true);
+        when(mockPlayer3.isAlive()).thenReturn(true);
+        when(mockPlayer1.isProtected()).thenReturn(false);
+        when(mockPlayer2.isProtected()).thenReturn(true);
+        when(mockPlayer3.isProtected()).thenReturn(false);
 
         // Create input
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(mockPlayer1, mockPlayer2, mockPlayer3));
         PlayerList playerList = new PlayerList(players);
 
         // Verify results
