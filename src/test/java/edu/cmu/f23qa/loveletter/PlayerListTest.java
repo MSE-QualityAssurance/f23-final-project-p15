@@ -2,11 +2,13 @@ package edu.cmu.f23qa.loveletter;
 
 import java.util.*;
 
+import org.easymock.Mock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 
@@ -400,5 +402,101 @@ public class PlayerListTest {
         // Verify results
         Player output = playerList.checkWinnerForJesterToken(winners);
         assertEquals(output, null);
+    }
+
+    /**
+     * The case that a single winner (no counts in discards) is found
+     */
+    @Test
+    public void testCompareHandSingleWinner() {
+        Hand mockHand1 = Mockito.mock(Hand.class);
+        Hand mockHand2 = Mockito.mock(Hand.class);
+        when(mockHand1.peek(0)).thenReturn(Card.PRINCESS);
+        when(mockHand2.peek(0)).thenReturn(Card.COUNTESS);
+
+        DiscardPile mockDiscardPile1 = Mockito.mock(DiscardPile.class);
+        DiscardPile mockDiscardPile2 = Mockito.mock(DiscardPile.class);
+        when(mockDiscardPile1.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.GUARD)));
+        when(mockDiscardPile2.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.BARON)));
+
+        Player player1 = new Player("u1", mockHand1, mockDiscardPile1);
+        Player player2 = new Player("u2", mockHand2, mockDiscardPile2);
+
+        PlayerList playerList = new PlayerList();
+        List<Player> winners = playerList.compareHand(Arrays.asList(player1, player2));
+
+        assertEquals(winners, Arrays.asList(player1));
+    }
+
+    /**
+     * The case that multiple winners (no counts in discards) are found
+     */
+    @Test
+    public void testCompareHandMultipleWinner() {
+        Hand mockHand1 = Mockito.mock(Hand.class);
+        Hand mockHand2 = Mockito.mock(Hand.class);
+        when(mockHand1.peek(0)).thenReturn(Card.PRINCE);
+        when(mockHand2.peek(0)).thenReturn(Card.PRINCE);
+
+        DiscardPile mockDiscardPile1 = Mockito.mock(DiscardPile.class);
+        DiscardPile mockDiscardPile2 = Mockito.mock(DiscardPile.class);
+        when(mockDiscardPile1.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.GUARD)));
+        when(mockDiscardPile2.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.BARON)));
+
+        Player player1 = new Player("u1", mockHand1, mockDiscardPile1);
+        Player player2 = new Player("u2", mockHand2, mockDiscardPile2);
+
+        PlayerList playerList = new PlayerList();
+        List<Player> winners = playerList.compareHand(Arrays.asList(player1, player2));
+
+        assertEquals(winners, Arrays.asList(player1, player2));
+    }
+
+    /**
+     * The case that Princess beats Bishop (no counts in discards)
+     */
+    @Test
+    public void testCompareHandBishopPrincess() {
+        Hand mockHand1 = Mockito.mock(Hand.class);
+        Hand mockHand2 = Mockito.mock(Hand.class);
+        when(mockHand1.peek(0)).thenReturn(Card.PRINCESS);
+        when(mockHand2.peek(0)).thenReturn(Card.BISHOP);
+
+        DiscardPile mockDiscardPile1 = Mockito.mock(DiscardPile.class);
+        DiscardPile mockDiscardPile2 = Mockito.mock(DiscardPile.class);
+        when(mockDiscardPile1.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.GUARD)));
+        when(mockDiscardPile2.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.BARON)));
+
+        Player player1 = new Player("u1", mockHand1, mockDiscardPile1);
+        Player player2 = new Player("u2", mockHand2, mockDiscardPile2);
+
+        PlayerList playerList = new PlayerList();
+        List<Player> winners = playerList.compareHand(Arrays.asList(player1, player2));
+
+        assertEquals(winners, Arrays.asList(player1)); 
+    }
+
+    /**
+     * The case that Countess + 2 Counts beat Princess
+     */
+    @Test
+    public void testCompareHand2Counts() {
+        Hand mockHand1 = Mockito.mock(Hand.class);
+        Hand mockHand2 = Mockito.mock(Hand.class);
+        when(mockHand1.peek(0)).thenReturn(Card.PRINCESS);
+        when(mockHand2.peek(0)).thenReturn(Card.COUNTESS);
+
+        DiscardPile mockDiscardPile1 = Mockito.mock(DiscardPile.class);
+        DiscardPile mockDiscardPile2 = Mockito.mock(DiscardPile.class);
+        when(mockDiscardPile1.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.BARON)));
+        when(mockDiscardPile2.getCards()).thenReturn(new ArrayList<Card>(Arrays.asList(Card.COUNT, Card.COUNT)));
+
+        Player player1 = new Player("u1", mockHand1, mockDiscardPile1);
+        Player player2 = new Player("u2", mockHand2, mockDiscardPile2);
+
+        PlayerList playerList = new PlayerList();
+        List<Player> winners = playerList.compareHand(Arrays.asList(player1, player2));
+
+        assertEquals(winners, Arrays.asList(player2)); 
     }
 }
