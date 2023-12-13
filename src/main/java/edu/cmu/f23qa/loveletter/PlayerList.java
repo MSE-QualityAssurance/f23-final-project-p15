@@ -10,6 +10,7 @@ public class PlayerList {
     private Player playerSetJesterToken = null;
     private Player playerWithJesterToken = null;
     private Player playerWithConstable = null;
+    private Player playerWithSycophant = null;
 
     public PlayerList() {
         this.players = new LinkedList<>();
@@ -68,6 +69,7 @@ public class PlayerList {
         this.playerSetJesterToken = null;
         this.playerWithJesterToken = null;
         this.playerWithConstable = null;
+        this.playerWithSycophant = null;
     }
 
     /**
@@ -292,7 +294,7 @@ public class PlayerList {
     /**
      * Set the playerWithConstable as who discarded the card
      * @param player
-     *          he player who discarded the card
+     *          the player who discarded the card
      */
     public void setPlayerWithConstable(Player player) {
         this.playerWithConstable = player;
@@ -304,5 +306,22 @@ public class PlayerList {
      */
     public Player checkPlayerForConstableToken() {
         return playerWithConstable;
+    }
+
+    /**
+     * Set the player with Sycophant token
+     * @param player
+     *          the player who was choson by player who played the Sycophant
+     */
+    public void setPlayerWithSycophant(Player player) {
+        this.playerWithSycophant = player;
+    }
+
+    /**
+     * Get the player with Sycophant token
+     * @return the player with Sycophant token
+     */
+    public Player getPlayerWithSycophant() {
+        return this.playerWithSycophant;
     }
 }

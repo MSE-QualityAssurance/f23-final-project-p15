@@ -139,6 +139,103 @@ public class Game extends GameActions {
         this.deck.removeCards(this.players.getNumPlayers());
     }
 
+    private List<Player> getOpponentsForTurn(Player user, Card card) {
+        // Get the player with Sycophant token and reset the token
+        Player playerWithSycophant = players.getPlayerWithSycophant();
+        players.setPlayerWithSycophant(null);    // reset
+
+        Player opponent1 = null;
+        Player opponent2 = null;
+        
+        // Get one opponent
+        List<Card> needOneOpponent = Arrays.asList(
+            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, 
+            Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP, Card.SYCOPHANT);
+      
+        if (needOneOpponent.contains(card)) {
+            // For cards which can target themselves
+            if (card == Card.PRINCE || card == Card.SYCOPHANT) { 
+                if (players.getNumAvailablePlayers(null) < 1) {
+                    System.out.println("No enough players can be chosen");
+                    return null;
+                } else {
+                    opponent1 = in.getOpponent(players, playerWithSycophant, null, null);
+                    if (opponent1 == null) {
+                        return null;
+                    } else {
+                        return new ArrayList<>(Arrays.asList(opponent1));
+                    }
+                }
+
+            // For cards which can not target themselves
+            } else {
+                if (players.getNumAvailablePlayers(user) < 1) {
+                    System.out.println("No enough players can be chosen");
+                    return null;
+                } else {
+                    opponent1 = in.getOpponent(players, playerWithSycophant, user, null);
+                    if (opponent1 == null) {
+                        return null;
+                    } else {
+                        return new ArrayList<>(Arrays.asList(opponent1));
+                    }
+                }
+            }
+        }
+
+        // Get two opponents
+        if (card == Card.CARDINAL) {
+            if (players.getNumAvailablePlayers(null) < 2) {
+                System.out.println("No enough players can be chosen");
+                return null;
+
+            } else {
+                opponent1 = in.getOpponent(players, playerWithSycophant, null, null);
+                if (opponent1 == null) {
+                    return null;
+                }
+                opponent2 = in.getOpponent(players, playerWithSycophant, null, opponent1);
+                return new ArrayList<>(Arrays.asList(opponent1, opponent2));
+            }
+        }
+
+        // Get one or two opponents
+        if (card == Card.BARONESS) {
+            int numAvailablePlayers = players.getNumAvailablePlayers(user);
+    
+            // No available player, skip
+            if (numAvailablePlayers < 1) {
+                System.out.println("No enough players can be chosen");
+                return null;
+
+            // One available player, choose one opponent
+            } else if (numAvailablePlayers == 1) {
+                opponent1 = in.getOpponent(players, playerWithSycophant, user, null);
+                if (opponent1 == null) {
+                    return null;
+                } else {
+                    return new ArrayList<>(Arrays.asList(opponent1));
+                }
+
+            // More than one players, choose one or two players
+            } else {
+                int numOpponents = in.getNumOpponents();
+                opponent1 = in.getOpponent(players, playerWithSycophant, user, null);
+                if (opponent1 == null) {
+                    return null;
+                }
+                if (numOpponents == 1) {
+                    return new ArrayList<>(Arrays.asList(opponent1));
+                } else {
+                    opponent2 = in.getOpponent(players, playerWithSycophant, user, opponent1);
+                    return new ArrayList<>(Arrays.asList(opponent1, opponent2));
+                }
+            }
+        } 
+        
+        return null;
+    }
+
     /**
      * Determines the card used by the player and performs the card's action.
      * 
@@ -150,60 +247,14 @@ public class Game extends GameActions {
     private void playCard(Card card, Player user) {
         user.getDiscarded().add(card);
 
-        // Get opponent
-        Player opponent = null;
-        Player opponent2 = null;
-
-        List<Card> needOneOpponent = Arrays.asList(
-            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, 
-            Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP);
-      
-        if (needOneOpponent.contains(card)) {
-            if (card == Card.PRINCE) {
-                if (players.getNumAvailablePlayers(null) < 1) {
-                    System.out.println("No enough players can be chosen");
-                    return;
-                }
-                opponent = in.getOpponent(players, null, null);
-            } else {
-                if (players.getNumAvailablePlayers(user) < 1) {
-                    System.out.println("No enough players can be chosen");
-                    return;
-                }
-                opponent = in.getOpponent(players, user, null);
-            }
+        List<Player> opponents = getOpponentsForTurn(user, card);
+        // No one can be chosen, the card loses effects
+        if (opponents == null) {
+            return;
         }
 
-        if (card == Card.CARDINAL) {
-            if (players.getNumAvailablePlayers(null) < 2) {
-                System.out.println("No enough players can be chosen");
-                return;
-            }
-            opponent = in.getOpponent(players, null, null);
-            opponent2 = in.getOpponent(players, null, opponent);
-        }
-
-        if (card == Card.BARONESS) {
-            int numAvailablePlayers = players.getNumAvailablePlayers(user);
-            // No available player, skip
-            if (numAvailablePlayers < 1) {
-                System.out.println("No enough players can be chosen");
-                return;
-
-            // One available player, choose one opponent
-            } else if (numAvailablePlayers == 1) {
-                System.out.println("Please choose the only player whose hand you want to inspect");
-                opponent = in.getOpponent(players, user, null);
-
-            // More than one players, choose one or two players
-            } else {
-                int numOpponents = in.getNumOpponents();
-                opponent = in.getOpponent(players, user, null);
-                if (numOpponents == 2) {
-                    opponent2 = in.getOpponent(players, user, opponent);
-                } 
-            }
-        }
+        Player opponent = opponents.get(0);
+        Player opponent2 = opponents.get(1);
 
         // Handlers
         switch (card) {
@@ -247,6 +298,9 @@ public class Game extends GameActions {
                 break;
             case BARONESS:
                 useBaroness(opponent, opponent2);
+                break;
+            case SYCOPHANT:
+                useSycophant(players, opponent);
                 break;
             default:
                 break;

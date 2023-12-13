@@ -263,4 +263,17 @@ abstract class GameActions {
             System.out.println(opponent2.getName() + " shows you a " + opponent2.getHand().peek(0));
         } 
     }
+
+    /**
+     * Choose a player and as long as the next card played has an effect that chooses one or more players, 
+     * it has to at least choose the player that was marked by the Sycophant.
+     * 
+     * @param players
+     *      The list of players
+     * @param opponent
+     *      The target to use Sycophant
+     */
+    void useSycophant(PlayerList players, Player opponent) {
+        players.setPlayerWithSycophant(opponent);
+    }
 }

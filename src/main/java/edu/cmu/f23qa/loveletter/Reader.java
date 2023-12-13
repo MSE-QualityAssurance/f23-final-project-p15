@@ -76,15 +76,46 @@ public class Reader {
      * 
      * @param playerList
      *          The entire player list
+     * @param playerWithSycophant
+     *          The player with the Sycophant token, null if no one has the Sycophant token
      * @param user
      *          If doesn't allow the user to choose himself, set as the user who is choosing the opponent
      *          Otherwise set as null
      * @param alreadyChosen
      *          If some player has already been chosen, set `chosen` as that player
      *          Otherwise set as null
-     * @return The player chosen as opponent
+     * @return 
+     *      The player chosen as opponent
+     *      Null if no one can be choosen due to the effect of Sycophant
      */
-    public Player getOpponent(PlayerList playerList, Player user, Player alreadyChosen) {
+    public Player getOpponent(PlayerList playerList, Player playerWithSycophant, Player user, Player alreadyChosen) {
+        // Check for Sycophant
+        if (playerWithSycophant != null) {
+            // Check if playerWithSycophant is a valid opponent
+            if (!playerWithSycophant.isAlive() || playerWithSycophant.isProtected()) {
+                return null;
+            }
+
+            // Can choose user itself
+            if (user == null) {
+                System.out.printf(
+                    "Due to the effect of Sycophant, player %s is chosen automatically\n", 
+                    playerWithSycophant.getName());
+                return playerWithSycophant;
+
+            // Can not choose user itself
+            } else {
+                if (playerWithSycophant.getName().equals(user.getName())) {
+                    return null;
+                } else {
+                    System.out.printf(
+                        "Due to the effect of Sycophant, player %s is chosen automatically\n", 
+                        playerWithSycophant.getName());
+                    return playerWithSycophant;
+                }
+            }
+        }
+
         Player opponent = null;
 
         while (true) {
