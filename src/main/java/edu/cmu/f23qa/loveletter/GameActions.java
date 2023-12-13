@@ -260,7 +260,7 @@ abstract class GameActions {
         } 
         if (opponent2 != null) {
             System.out.println(opponent2.getName() + " shows you a " + opponent2.getHand().peek(0));
-        } 
+        }
     }
 
     /**
