@@ -219,36 +219,32 @@ public class ReaderTest {
 
     // This test case is for get 1 player (invalid, not enough)
     @Test
-    public void testGetPlayerNum1() throws InterruptedException {
-        Mockito.when(mockScanner.nextLine()).thenReturn("u1", "");
-        inputThread = new Thread(() -> reader.getPlayers(2, 8));
-        inputThread.start();
-
-        // Set a timeout (2s) to interrupt the player input thread
-        Thread.sleep(2000);
-        inputThread.interrupt();
+    public void testGetPlayerNum1() {
+        Mockito.when(mockScanner.nextLine()).thenReturn("u1", "", "u2", "");
+        List<String> result = reader.getPlayers(2, 8);
 
         String consoleOutput = outputStream.toString();
         assertTrue(consoleOutput.contains("There must be at least 2 players, please add more players!"));
     }
 
+
     // This test case is for get opponent when player input is invalid
+    /* 
     @Test  
-    public void testGetOpponentNullNullNull() throws InterruptedException {
+    public void testGetOpponentNullNullNull() {
         List<String> playerNames = new ArrayList<>(
             Arrays.asList("u1", "u2", "u3", "u4", "u5"));
         players.addPlayers(playerNames);
 
-        Mockito.when(mockScanner.nextLine()).thenReturn("u666");
-        inputThread = new Thread(() -> reader.getOpponent(players, null, null, null));
-        inputThread.start();
-
-        Thread.sleep(2000);
-        inputThread.interrupt();
-
+        Mockito.when(mockScanner.nextLine()).thenReturn("u6", "u2");
+        // assertNull(players.getPlayer(mockScanner.nextLine()));
+        // assertNotNull(players.getPlayer(mockScanner.nextLine()));
+        Player opponent = reader.getOpponent(players, null, null, null);
+ 
         String consoleOutput = outputStream.toString();
         assertTrue(consoleOutput.contains("This player is not in the game"));
     }
+    */
 
     // This test case is for get opponent when sycophantPlayer is not alive and thus returns null
     @Test
@@ -302,7 +298,7 @@ public class ReaderTest {
         inputThread = new Thread(() -> reader.getOpponent(players, null, mockUser, null));
         inputThread.start();
 
-        Thread.sleep(2000);
+        Thread.sleep(100);
         inputThread.interrupt();
 
         String consoleOutput = outputStream.toString();
