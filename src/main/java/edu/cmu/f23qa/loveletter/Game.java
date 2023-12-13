@@ -252,9 +252,12 @@ public class Game extends GameActions {
         if (opponents == null) {
             return;
         }
-
+        
         Player opponent = opponents.get(0);
-        Player opponent2 = opponents.get(1);
+        Player opponent2 = null;
+        if (opponents.size() == 2) {
+            opponent2 = opponents.get(1);
+        }
 
         // Handlers
         switch (card) {
