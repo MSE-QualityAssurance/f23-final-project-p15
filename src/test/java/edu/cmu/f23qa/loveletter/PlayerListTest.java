@@ -111,4 +111,80 @@ public class PlayerListTest {
         playerList.setBeginner(null);
         assertEquals(playerList.currentPlayer, 0);
     }
+
+    /**
+     * Test for getting the number of players available to choose with input
+     */
+    @Test
+    public void testNumAvailablePlayersHasInput(){
+        // Create test double and define its behavior
+        Player spyPlayer1 = mock(Player.class);
+        Player spyPlayer2 = mock(Player.class);
+        Player spyPlayer3 = mock(Player.class);
+        when(spyPlayer1.isAlive()).thenReturn(true);
+        when(spyPlayer2.isAlive()).thenReturn(true);
+        when(spyPlayer3.isAlive()).thenReturn(true);
+        when(spyPlayer1.isProtected()).thenReturn(false);
+        when(spyPlayer2.isProtected()).thenReturn(false);
+        when(spyPlayer3.isProtected()).thenReturn(false);
+
+        // Create input
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        PlayerList playerList = new PlayerList(players);
+
+        // Verify results
+        int num = playerList.getNumAvailablePlayers(spyPlayer1);
+        assertEquals(num, 2);
+    }
+
+    /**
+     * Test for getting the number of players available to choose with null input
+     */
+    @Test
+    public void testNumAvailablePlayersNullInput(){
+        // Create test double and define its behavior
+        Player spyPlayer1 = mock(Player.class);
+        Player spyPlayer2 = mock(Player.class);
+        Player spyPlayer3 = mock(Player.class);
+        when(spyPlayer1.isAlive()).thenReturn(true);
+        when(spyPlayer2.isAlive()).thenReturn(true);
+        when(spyPlayer3.isAlive()).thenReturn(true);
+        when(spyPlayer1.isProtected()).thenReturn(false);
+        when(spyPlayer2.isProtected()).thenReturn(false);
+        when(spyPlayer3.isProtected()).thenReturn(false);
+
+        // Create input
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        PlayerList playerList = new PlayerList(players);
+
+        // Verify results
+        int num = playerList.getNumAvailablePlayers(null);
+        assertEquals(num, 3);
+    }
+
+    /**
+     * Test for getting the number of players available to choose 
+     * where some players in the player list are unable to choose
+     */
+    @Test
+    public void testNumAvailablePlayersDeadProtected(){
+        // Create test double and define its behavior
+        Player spyPlayer1 = mock(Player.class);
+        Player spyPlayer2 = mock(Player.class);
+        Player spyPlayer3 = mock(Player.class);
+        when(spyPlayer1.isAlive()).thenReturn(false);
+        when(spyPlayer2.isAlive()).thenReturn(true);
+        when(spyPlayer3.isAlive()).thenReturn(true);
+        when(spyPlayer1.isProtected()).thenReturn(false);
+        when(spyPlayer2.isProtected()).thenReturn(true);
+        when(spyPlayer3.isProtected()).thenReturn(false);
+
+        // Create input
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        PlayerList playerList = new PlayerList(players);
+
+        // Verify results
+        int num = playerList.getNumAvailablePlayers(null);
+        assertEquals(num, 1);
+    }
 }
