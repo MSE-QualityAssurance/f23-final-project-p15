@@ -23,8 +23,8 @@ public class GameActionTest {
     private DiscardPile mockDiscardPile1, mockDiscardPile2;
     private Player player1, player2;
     private Reader mockReader;
-    private Deck mockDeck;
     private PlayerList mockPlayers;
+    private Deck mockDeck;
 
     @BeforeEach
     public void setUp() {
@@ -43,6 +43,7 @@ public class GameActionTest {
         mockReader = mock(Reader.class);
         mockDeck = mock(Deck.class);
         mockPlayers = mock(PlayerList.class);
+        mockDeck = mock (Deck.class);
     }
 
     /**
@@ -376,5 +377,86 @@ public class GameActionTest {
 
         assertTrue(spyPlayer1.isAlive() == true);
         assertTrue(spyPlayer2.isAlive() == true);
+    }
+    /**
+     * Test for the effects of Priest
+     * Ensures that the usePriest method correctly reveals the opponent's card.
+     */ 
+    @Test
+    public void testUsePriest() {
+        Card opponentCard = Card.PRIEST;
+        when(mockHand2.peek(0)).thenReturn(opponentCard);
+        Player opponent = new Player("Opponent", mockHand2, mockDiscardPile2);
+
+        gameActions.usePriest(opponent);
+        assertEquals("Opponent shows you a Priest (2)", outputStream.toString().trim());
+    }
+
+    /**
+     * Test for the effects of Prince
+     * Verifies that the usePrince method forces the opponent to discard their hand and draw a new card.
+     */
+    @Test
+    public void testUsePrince() {
+        when(mockDeck.hasMoreCardsWithExtraCard()).thenReturn(true);
+        when(mockDeck.draw()).thenReturn(Card.GUARD);
+        when(mockHand2.peek(0)).thenReturn(Card.PRINCESS);
+        Player opponent = new Player("Opponent", mockHand2, mockDiscardPile2);
+
+        gameActions.usePrince(opponent, mockDeck);
+
+        verify(mockHand2, times(1)).remove(0);
+        verify(mockHand2, times(1)).add(Card.GUARD);
+    }
+
+    /**
+     * Test for the effects of King
+     * Checks if the useKing method properly swaps the cards between the user and the opponent.
+     */
+    @Test
+    public void testUseKing() {
+        Hand userHand = new Hand();
+        Hand opponentHand = new Hand();
+        userHand.add(Card.KING); // Adding a KING card to the user's hand
+        opponentHand.add(Card.PRIEST); // Adding a PRIEST card to the opponent's hand
+
+        DiscardPile userDiscardPile = new DiscardPile();
+        DiscardPile opponentDiscardPile = new DiscardPile();
+
+        Player user = new Player("User", userHand, userDiscardPile);
+        Player opponent = new Player("Opponent", opponentHand, opponentDiscardPile);
+
+        GameActions gameActions = new GameActions() {};
+        gameActions.useKing(user, opponent);
+
+        assertEquals(Card.PRIEST, user.getHand().peek(0));
+        assertEquals(Card.KING, opponent.getHand().peek(0));
+    }
+    
+    /**
+     * Test for the effects of Baroness inspecting one player
+     * Confirms that the useBaroness method allows a player to inspect one opponent's hand.
+     */
+    @Test
+    public void testUseBaronessInspectOnePlayer() {
+        when(mockHand2.peek(0)).thenReturn(Card.KING);
+
+        gameActions.useBaroness(player2, null);
+
+        assertEquals("P2 shows you a King (6)", outputStream.toString().trim());
+    }
+
+    /**
+     * Test for the effects of Baroness inspecting two players
+     * Ensures that the useBaroness method allows a player to inspect two opponents' hands.
+     */
+    @Test
+    public void testUseBaronessInspectTwoPlayers() {
+        when(mockHand1.peek(0)).thenReturn(Card.KING);
+        when(mockHand2.peek(0)).thenReturn(Card.PRINCESS);
+
+        gameActions.useBaroness(player1, player2);
+
+        assertEquals("P1 shows you a King (6)\nP2 shows you a Princess (8)", outputStream.toString().trim());
     }
 }
