@@ -159,7 +159,7 @@ public class Reader {
                 cardNumber = in.nextInt();
                 in.nextLine();
                 if (cardNumber < 0 || cardNumber > 9 || cardNumber == 1) {
-                    System.out.println("Invalid card name");
+                    System.out.println("Invalid card value!");
                     continue;
                 } else {
                     break;
