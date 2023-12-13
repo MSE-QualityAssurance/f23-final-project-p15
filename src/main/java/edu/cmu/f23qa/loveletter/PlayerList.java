@@ -175,7 +175,7 @@ public class PlayerList {
      * @return the number of Count in player's discarded pile
      * 
      */
-    private int checkCountInDiscard(Player player) {
+    public int checkCountInDiscard(Player player) {
         int countNum = 0;
         ArrayList<Card> discards = player.getDiscarded().getCards();
         for (Card c : discards) {
