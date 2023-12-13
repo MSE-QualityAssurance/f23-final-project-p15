@@ -2,20 +2,27 @@ package edu.cmu.f23qa.loveletter;
 
 import java.util.*;
 
-<<<<<<< HEAD
-import org.junit.jupiter.api.Test;
-=======
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
->>>>>>> 98d35fc (Add first test case for set tokens)
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
 public class PlayerListTest {
-<<<<<<< HEAD
+    
+    @Test
+    public void testSetTokensToWinValidPlayers() {
+        Player spyPlayer1 = mock(Player.class);
+        Player spyPlayer2 = mock(Player.class);
+        Player spyPlayer3 = mock(Player.class);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        PlayerList playerList = new PlayerList(players);
+        
+        Assertions.assertEquals(playerList.setTokensToWin(), 5);
+    }
+
     /**
      * Test for only one player has the highest discard pile value
      */
@@ -232,19 +239,4 @@ public class PlayerListTest {
         Player output = playerList.checkWinnerForJesterToken(winners);
         assertEquals(output, null);
     }
-=======
-    @Test
-    public void testSetTokensToWinValidPlayers() {
-        Player spyPlayer1 = mock(Player.class);
-        Player spyPlayer2 = mock(Player.class);
-        Player spyPlayer3 = mock(Player.class);
-        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
-        PlayerList playerList = new PlayerList(players);
-        
-        Assertions.assertEquals(playerList.setTokensToWin(), 5);
-
-        
-        }
-
->>>>>>> 98d35fc (Add first test case for set tokens)
 }
