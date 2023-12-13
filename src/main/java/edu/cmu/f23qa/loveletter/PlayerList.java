@@ -23,7 +23,7 @@ public class PlayerList {
     /**
      * Set the number of tokens to win the game
      */
-    public void setTokensToWin() {
+    public int setTokensToWin() {
         Map<Integer, Integer> playerNumToToken = new HashMap<>();
         playerNumToToken.put(2, 7);
         playerNumToToken.put(3, 5);
@@ -36,6 +36,7 @@ public class PlayerList {
         int numPlayers = this.players.size();
 
         this.tokensToWin = playerNumToToken.getOrDefault(numPlayers, 0);
+        return this.tokensToWin;
     }
 
     /**
@@ -174,7 +175,7 @@ public class PlayerList {
      * @return the number of Count in player's discarded pile
      * 
      */
-    private int checkCountInDiscard(Player player) {
+    public int checkCountInDiscard(Player player) {
         int countNum = 0;
         ArrayList<Card> discards = player.getDiscarded().getCards();
         for (Card c : discards) {
