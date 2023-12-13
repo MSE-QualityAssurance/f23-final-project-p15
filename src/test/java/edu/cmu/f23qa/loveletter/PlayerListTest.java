@@ -187,4 +187,42 @@ public class PlayerListTest {
         int num = playerList.getNumAvailablePlayers(null);
         assertEquals(num, 1);
     }
+
+    /**
+     * Test when there's player with Jester Token in the winners list
+     */
+    @Test
+    public void testCheckWinnerForJesterTokenWithJester(){
+        // Create input
+        Player p1 = new Player("P1");
+        Player p2 = new Player("P2");
+        Player p3 = new Player("P3");
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(p1, p2));
+        PlayerList playerList = new PlayerList(players);
+        playerList.setJesterToken(p1, p3);      // set Jester token for p3
+        LinkedList<Player> winners = new LinkedList<>(Arrays.asList(p1, p2, p3));
+
+        // Verify results
+        Player output = playerList.checkWinnerForJesterToken(winners);
+        assertEquals(output, p1);
+    }
+
+    /**
+     * Test when there's no player with Jester Token in the winners list
+     */
+    @Test
+    public void testCheckWinnerForJesterTokenNoJester(){
+        // Create input
+        Player p1 = new Player("P1");
+        Player p2 = new Player("P2");
+        Player p3 = new Player("P3");
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(p1, p2));
+        PlayerList playerList = new PlayerList(players);
+        playerList.setJesterToken(p1, p3);      // set Jester token for p3
+        LinkedList<Player> winners = new LinkedList<>(Arrays.asList(p1, p2));
+
+        // Verify results
+        Player output = playerList.checkWinnerForJesterToken(winners);
+        assertEquals(output, null);
+    }
 }
