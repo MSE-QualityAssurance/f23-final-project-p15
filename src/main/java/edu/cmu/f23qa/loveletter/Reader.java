@@ -150,21 +150,34 @@ public class Reader {
      * Pick the card players want to guess when they use the "Guard" card
      * @return The card the player wants to guess
      */
-    public String pickCardWhenGuard() {
-        ArrayList<String> cardNames = new ArrayList<>(Arrays.asList(Card.CARD_NAMES));
+    public int pickCardNumberWhenGuard(boolean ifPremium) {
+        int cardNumber;
 
-        String cardName;
         while (true) {
-            System.out.print("Which card would you like to guess: ");
-            cardName = in.nextLine();
-
-            if (!cardNames.contains(cardName.toLowerCase()) || cardName.equalsIgnoreCase("guard")) {
-                System.out.println("Invalid card name");
-                continue;
-            } else {
-                return cardName;
+            if(ifPremium) { // 5-8 players
+                System.out.print("Which card would you like to guess, from 0-9 except for 1: ");
+                cardNumber = in.nextInt();
+                in.nextLine();
+                if (cardNumber < 0 || cardNumber > 9 || cardNumber == 1) {
+                    System.out.println("Invalid card value!");
+                    continue;
+                } else {
+                    break;
+                }
+            }
+            else { // 2-4 players
+                System.out.print("Which card would you like to guess, from 2-8: ");
+                    cardNumber = in.nextInt();
+                    in.nextLine();
+                if (cardNumber < 2 || cardNumber > 8) {
+                    System.out.println("Invalid card name");
+                    continue;
+                } else {
+                    break;
+                }
             }
         }
+        return cardNumber;
     }
 
     /**

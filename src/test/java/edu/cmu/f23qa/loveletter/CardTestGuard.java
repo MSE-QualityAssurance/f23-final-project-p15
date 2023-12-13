@@ -22,7 +22,7 @@ public class CardTestGuard {
         Deck deck = Mockito.mock(Deck.class);
 
         GameActions gameActions = new GameActions() {};
-        gameActions.useGuard("Priest", opponent, user, deck); 
+        gameActions.useGuard(2, opponent, user, deck); 
 
         Assertions.assertFalse(opponent.isAlive(), "Opponent should be eliminated for having a Priest");
     }
@@ -39,7 +39,7 @@ public class CardTestGuard {
         Deck deck = Mockito.mock(Deck.class);
 
         GameActions gameActions = new GameActions() {};
-        gameActions.useGuard("KING", opponent, user, deck); 
+        gameActions.useGuard(6, opponent, user, deck); 
 
         Assertions.assertTrue(opponent.isAlive(), "Opponent should not be eliminated for having a Priest");
     }

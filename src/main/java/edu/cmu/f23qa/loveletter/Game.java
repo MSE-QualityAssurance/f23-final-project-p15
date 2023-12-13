@@ -251,23 +251,38 @@ public class Game extends GameActions {
     private void playCard(Card card, Player user) {
         user.getDiscarded().add(card);
 
-        List<Player> opponents = getOpponentsForTurn(user, card);
-        // No one can be chosen, the card loses effects
-        if (opponents == null) {
-            return;
-        }
+        List<Card> needOpponent = Arrays.asList(
+            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE, 
+            Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP,
+            Card.SYCOPHANT, Card.CARDINAL, Card.BARONESS);
         
-        Player opponent = opponents.get(0);
+        List<Player> opponents = new ArrayList<Player>();
+        Player opponent = null;
         Player opponent2 = null;
-        if (opponents.size() == 2) {
-            opponent2 = opponents.get(1);
+
+        if (needOpponent.contains(card)) {
+            opponents = getOpponentsForTurn(user, card);
+            // No one can be chosen, the card loses effects
+            if (opponents == null) {
+                return;
+            }
+            
+            opponent = opponents.get(0);
+            if (opponents.size() == 2) {
+                opponent2 = opponents.get(1);
+            }
         }
 
         // Handlers
         // all cards go here execpt for countess, count    
         switch (card) {
             case GUARD:
-                String guessedCardOfGuard = in.pickCardWhenGuard();
+                boolean ifPremium = false;
+                if (players.getNumPlayers() >= 5) {
+                    ifPremium = true;
+                }
+                
+                int guessedCardOfGuard = in.pickCardNumberWhenGuard(ifPremium);
                 useGuard(guessedCardOfGuard, opponent, user, deck);
                 break;
             case PRIEST:
