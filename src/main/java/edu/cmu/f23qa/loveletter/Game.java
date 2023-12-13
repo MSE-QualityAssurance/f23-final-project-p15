@@ -56,8 +56,8 @@ public class Game extends GameActions {
         while (!checkIfGameEnds()) {
             setUpRound();
             playRound();
+            checkForRoundWinner();
         } 
-        // end of game
     }
 
     /**
@@ -75,31 +75,33 @@ public class Game extends GameActions {
      * Play one round
      */
     private void playRound() {
-        List<Player> roundWinners = new ArrayList<Player>();
         System.out.println("A new round begins!");
+
         while (players.getAlivePlayers().size() != 1 && deck.hasMoreCards()) {
             Player turn = players.getCurrentPlayer();
 
             if (turn.isAlive()) {
                 players.printUsedPiles();
                 System.out.println("\n" + turn.getName() + "'s turn:");
+
+                // Reverse handmaid status
                 if (turn.isProtected()) {
                     turn.switchProtection();
                 }
+
+                // Draw a new card
                 turn.getHand().add(deck.draw());
 
+                // Choose a card and play
                 Card card = getCard(turn);
                 playCard(card, turn);
             }
+
             // check if the game already ends
             if (checkIfGameEnds()) {
                 return;
             }
         }
-        // check if the round ends
-        roundWinners = checkForRoundWinner();
-        // print that the round ends
-        System.out.println("The round ends! Winner(s): " + roundWinners);
     }
 
     /**
@@ -393,6 +395,9 @@ public class Game extends GameActions {
 
         // set the latest winner
         lastRoundWinner = winners.get(0);
+
+        System.out.println("The round ends!!! Winner(s): " + winners);
+        System.out.println("----------------------------------------------------------\n\n");
 
         return winners;
     }
