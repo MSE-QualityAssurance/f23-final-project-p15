@@ -154,11 +154,11 @@ public class Reader {
         int cardNumber;
 
         while (true) {
-            System.out.print("Which card would you like to guess, from 0-9 except for 1: ");
-            cardNumber = in.nextInt();
-            in.nextLine();
             if(ifPremium) { // 5-8 players
-                if (cardNumber < 0 || cardNumber > 9 || cardNumber != 1) {
+                System.out.print("Which card would you like to guess, from 0-9 except for 1: ");
+                cardNumber = in.nextInt();
+                in.nextLine();
+                if (cardNumber < 0 || cardNumber > 9 || cardNumber == 1) {
                     System.out.println("Invalid card name");
                     continue;
                 } else {
@@ -166,6 +166,9 @@ public class Reader {
                 }
             }
             else { // 2-4 players
+                System.out.print("Which card would you like to guess, from 2-8: ");
+                    cardNumber = in.nextInt();
+                    in.nextLine();
                 if (cardNumber < 2 || cardNumber > 8) {
                     System.out.println("Invalid card name");
                     continue;
