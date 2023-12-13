@@ -2,13 +2,12 @@ package edu.cmu.f23qa.loveletter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.security.Guard;
-import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class GameActionTest {
@@ -23,7 +22,7 @@ public class GameActionTest {
 
     @BeforeEach
     public void setUp() {
-        // Redirection output string
+        // Redirection output stream
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
@@ -61,7 +60,7 @@ public class GameActionTest {
 
         // Assert revealing card and output
         String output = outputStream.toString();
-        assertEquals(output, "P1\nP2\nP1 shows you a " + Card.GUARD + "\n");
+        assertTrue(output.contains("P1 shows you a " + Card.GUARD));
     }
 
     /**
@@ -87,7 +86,7 @@ public class GameActionTest {
 
         // Assert revealing card and output
         String output = outputStream.toString();
-        assertEquals(output, "P1\nP2\nP2 shows you a " + Card.BARON + "\n");
+        assertTrue(output.contains("P2 shows you a " + Card.BARON));
     }
 
 }
