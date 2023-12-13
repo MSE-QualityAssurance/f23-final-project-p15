@@ -44,15 +44,4 @@ public class CardTestGuard {
         Assertions.assertTrue(opponent.isAlive(), "Opponent should not be eliminated for having a Priest");
     }
 
-    // No Eligible Players for Guard Card
-    @Test
-    void testGuardNoEligiblePlayers() {
-        // Simulate a scenario where all other players are either protected or out
-    }
-
-    // Invalid Number Named with Guard Card
-    @Test
-    void testGuardInvalidNumber() {
-        // Implement a test where user attempts to guess number 1 and verify the game's response
-    }
 }
