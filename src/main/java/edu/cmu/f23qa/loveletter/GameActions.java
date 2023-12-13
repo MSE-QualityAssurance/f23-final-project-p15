@@ -65,7 +65,7 @@ abstract class GameActions {
             user.addToken();
 
             // check if the game ends with this token
-            if (user.getTokens() == 4) {
+            if (user.getTokens() >= 4) {
                 System.out.println("You have won the game!");
                 return;
             }

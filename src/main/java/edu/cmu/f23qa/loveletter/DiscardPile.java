@@ -34,4 +34,8 @@ public class DiscardPile {
             System.out.println(c);
         }
     }
+
+    public ArrayList<Card> getCards() {
+        return this.cards;
+    }
 }

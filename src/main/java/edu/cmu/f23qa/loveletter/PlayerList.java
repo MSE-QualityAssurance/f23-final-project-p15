@@ -48,7 +48,7 @@ public class PlayerList {
     /**
      * Get the player for current turn and update the currentPlayer
      *
-     * @return the player for current tur
+     * @return the player for current turn
      */
     public Player getCurrentPlayer() {
         Player player = players.get(currentPlayer);
@@ -161,20 +161,46 @@ public class PlayerList {
     }
 
     /**
+     * Checks if there is any Count in player's discarded pile.
+     *
+     * @param player
+     *          the player whose discard pile is checked
+     * @return the number of Count in player's discarded pile
+     * 
+     */
+    private int checkCountInDiscard(Player player) {
+        int countNum = 0;
+        ArrayList<Card> discards = player.getDiscarded().getCards();
+        for (Card c : discards) {
+            if (c.name().equalsIgnoreCase("Count")) {
+                countNum++;
+            }
+        }
+        return countNum;
+    }
+
+    /**
      * Returns the players with the highest hand value.
      * 
      * @return the players with the highest hand value
      */
     public List<Player> compareHand(List<Player> alivePlayers) {
         List<Player> winners = new ArrayList<>();
-        int maxHand = -1;
+        double maxHand = -1;
+        
         for (Player player : alivePlayers) {
-            int hand = player.getHand().peek(0).value();
+            double hand = (double)player.getHand().peek(0).value();
             String handName = player.getHand().peek(0).name();
+
             // Bishop can't beat Princess
-            if (handName.equalsIgnoreCase("Bishop") && maxHand == 8) {
-                continue;
+            if (handName.equalsIgnoreCase("Bishop")) {
+                hand = 7.5;
             }
+
+            // check if there is any Count in player's discarded pile
+            int countNum = checkCountInDiscard(player);
+            hand += countNum;
+
             if (hand > maxHand) {
                 maxHand = hand;
                 winners.clear();
