@@ -233,7 +233,13 @@ public class Reader {
         System.out.println("0. Yes");
         System.out.println("1. No");
         System.out.print("Your choice: ");
-        return in.nextInt();
+        int choice = in.nextInt();
+        while (choice != 0 && choice != 1) {
+            System.out.println("Invalid choice!");
+            System.out.print("Your choice: ");
+            choice = in.nextInt();
+        }
+        return choice;
     }
 
     /**
