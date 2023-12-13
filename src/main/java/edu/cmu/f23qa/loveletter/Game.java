@@ -75,6 +75,8 @@ public class Game extends GameActions {
      * Play one round
      */
     private void playRound() {
+        List<Player> roundWinners = new ArrayList<Player>();
+        System.out.println("A new round begins!");
         while (players.getAlivePlayers().size() != 1 && deck.hasMoreCards()) {
             Player turn = players.getCurrentPlayer();
 
@@ -101,11 +103,13 @@ public class Game extends GameActions {
             }
             // check if the game already ends
             if (checkIfGameEnds()) {
-                break;
+                return;
             }
-            // check if the round ends
-            checkForRoundWinner();
         }
+        // check if the round ends
+        roundWinners = checkForRoundWinner();
+        // print that the round ends
+        System.out.println("The round ends! Winner(s): " + roundWinners);
     }
 
     /**
