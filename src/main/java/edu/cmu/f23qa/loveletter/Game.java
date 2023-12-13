@@ -95,7 +95,7 @@ public class Game extends GameActions {
                     } else if (royaltyPos == 1 && turn.getHand().peek(0).value() == 7) {
                         playCard(turn.getHand().remove(0), turn);
                     } else {
-                        playCard(getCard(turn), turn);()
+                        playCard(getCard(turn), turn);
                     }
                 } else {
                     playCard(getCard(turn), turn);
