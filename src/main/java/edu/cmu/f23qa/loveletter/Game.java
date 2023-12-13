@@ -116,7 +116,7 @@ public class Game extends GameActions {
      * Check if the game ends
      * @return true if the game ends, false if not
      */ 
-    private boolean checkIfGameEnds() {
+    public boolean checkIfGameEnds() {
         List<Player> gameWinners = players.getGameWinner();
         if (gameWinners.size() == 0) {
             return false;
@@ -393,5 +393,10 @@ public class Game extends GameActions {
         lastRoundWinner = winners.get(0);
 
         return winners;
+    }
+
+    // New method to get the number of players in the game
+    public int getPlayerCount() {
+        return this.players.getNumPlayers();
     }
 }

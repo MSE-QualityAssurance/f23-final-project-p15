@@ -251,6 +251,7 @@ public class ReaderTest {
     }
 
     // This test case is for get opponent when sycophantPlayer is not alive and thus returns null
+    @Test
     public void testGetOpponentNotNullNullInvalid(){
         List<String> playerNames = new ArrayList<>(
             Arrays.asList("u1", "u2", "u3", "u4", "u5"));
@@ -265,6 +266,7 @@ public class ReaderTest {
     }
 
     // This test case is for get opponent when sycophantPlayer is valid and thus returns sycophantPlayer
+    @Test
     public void testGetOpponentNotNullNullValid() {
         List<String> playerNames = new ArrayList<>(
             Arrays.asList("u1", "u2", "u3", "u4", "u5"));

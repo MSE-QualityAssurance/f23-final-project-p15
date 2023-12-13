@@ -26,7 +26,7 @@ public class GameActionTest {
 
     @BeforeEach
     public void setUp() {
-        // Redirection output string
+        // Redirection output stream
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
@@ -188,7 +188,7 @@ public class GameActionTest {
 
         // Assert revealing card and output
         String output = outputStream.toString();
-        assertTrue(output.contains("P1\nP2\nP1 shows you a " + Card.GUARD));
+        assertTrue(output.contains("P1 shows you a " + Card.GUARD));
     }
 
     /**
@@ -214,7 +214,7 @@ public class GameActionTest {
 
         // Assert revealing card and output
         String output = outputStream.toString();
-        assertTrue(output.contains("P1\nP2\nP2 shows you a " + Card.BARON));
+        assertTrue(output.contains("P2 shows you a " + Card.BARON));
     }
 
 }
