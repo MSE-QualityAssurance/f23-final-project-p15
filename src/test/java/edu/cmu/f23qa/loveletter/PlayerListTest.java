@@ -404,23 +404,6 @@ public class PlayerListTest {
         assertEquals(output, null);
     }
 
-    private Player createMockPlayerWithCard(String cardName, int cardValue) {
-        // 创建 Card 对象的 mock
-        Card mockCard = Mockito.mock(Card.class);
-        when(mockCard.name()).thenReturn(cardName);
-        when(mockCard.value()).thenReturn(cardValue);
-
-        // 创建 Hand 对象的 mock
-        Hand mockHand = Mockito.mock(Hand.class);
-        when(mockHand.peek(0)).thenReturn(mockCard);
-
-        // 创建 Player 对象的 mock
-        Player mockPlayer = Mockito.mock(Player.class);
-        when(mockPlayer.getHand()).thenReturn(mockHand);
-
-        return mockPlayer;
-    }
-
     /**
      * The case that a single winner (no counts in discards) is found
      */
