@@ -88,18 +88,8 @@ public class Game extends GameActions {
                 }
                 turn.getHand().add(deck.draw());
 
-                int royaltyPos = turn.getHand().royaltyPos();
-                if (royaltyPos != -1) {
-                    if (royaltyPos == 0 && turn.getHand().peek(1).value() == 7) {
-                        playCard(turn.getHand().remove(1), turn);
-                    } else if (royaltyPos == 1 && turn.getHand().peek(0).value() == 7) {
-                        playCard(turn.getHand().remove(0), turn);
-                    } else {
-                        playCard(getCard(turn), turn);
-                    }
-                } else {
-                    playCard(getCard(turn), turn);
-                }
+                Card card = getCard(turn);
+                playCard(card, turn);
             }
             // check if the game already ends
             if (checkIfGameEnds()) {
@@ -331,7 +321,7 @@ public class Game extends GameActions {
     }
 
     /**
-     * Allows for the user to pick a card from their hand to play.
+     * Pick a card from the player's hand to play in this turn.
      *
      * @param user
      *             the current player
@@ -339,6 +329,18 @@ public class Game extends GameActions {
      * @return the chosen card
      */
     private Card getCard(Player user) {
+        // Check if the user holds Countess as well as King or Prince
+        int royaltyPos = user.getHand().royaltyPos();
+        if (royaltyPos != -1) {
+            if (royaltyPos == 0 && user.getHand().peek(1) == Card.COUNTESS) {
+                return user.getHand().remove(1);
+
+            } else if (royaltyPos == 1 && user.getHand().peek(0) == Card.COUNTESS) {
+                return user.getHand().remove(0);
+
+            } 
+        }
+
         user.getHand().print();
         int idx = in.getCard();
 
