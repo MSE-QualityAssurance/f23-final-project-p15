@@ -12,6 +12,9 @@ import static org.mockito.Mockito.*;
 
 public class PlayerListTest {
     
+    /**
+     * Test for player numbers between 2-8
+     */
     @Test
     public void testSetTokensToWinValidPlayers() {
         Player spyPlayer1 = mock(Player.class);
@@ -21,6 +24,84 @@ public class PlayerListTest {
         PlayerList playerList = new PlayerList(players);
         
         Assertions.assertEquals(playerList.setTokensToWin(), 5);
+    }
+
+    /**
+     * Test for player numbers below 1 or above 9
+     */
+    @Test
+    public void testSetTokensToWinInvalidPlayers() {
+        Player spyPlayer1 = mock(Player.class);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1));
+        PlayerList playerList = new PlayerList(players);
+        
+        Assertions.assertEquals(playerList.setTokensToWin(), 0);
+    }
+
+    /**
+     * Test for adding a list of player names
+     */
+    @Test
+    public void testAddPlayers() {
+        List<String> playerNames = new ArrayList<>(Arrays.asList("u1", "u2", "u3"));
+        Player player1 = new Player("u1");
+        Player player2 = new Player("u2");
+        Player player3 = new Player("u3");
+        LinkedList<Player> expectedPlayers = new LinkedList<>(Arrays.asList(player1, player2, player3));
+        LinkedList<Player> testPlayers = new LinkedList<>();
+        PlayerList playerList = new PlayerList(testPlayers);
+        playerList.addPlayers(playerNames);
+        for (int i = 0; i < testPlayers.size(); i++){
+            Assertions.assertEquals(testPlayers.get(i).getName(), expectedPlayers.get(i).getName());
+        }
+
+        Assertions.assertEquals(playerList, playerList);
+    }
+
+    /**
+     * Test for getting current player and update on currentplayer index
+     */
+    @Test
+    public void testGetCurrentPlayer() {
+        Player spyPlayer1 = mock(Player.class);
+        Player spyPlayer2 = mock(Player.class);
+        Player spyPlayer3 = mock(Player.class);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        PlayerList playerList = new PlayerList(players);
+        playerList.currentPlayer = 2;
+        Assertions.assertEquals(playerList.getCurrentPlayer(), spyPlayer3);
+        Assertions.assertEquals(playerList.currentPlayer, 0);
+    }
+
+    /**
+     * Test for getting all alive players in the game
+     */
+    @Test
+    public void testGetAlivePlayer() {
+        Player spyPlayer1 = mock(Player.class);
+        Player spyPlayer2 = mock(Player.class);
+        Player spyPlayer3 = mock(Player.class);
+        when(spyPlayer1.isAlive()).thenReturn(true);
+        when(spyPlayer2.isAlive()).thenReturn(false);
+        when(spyPlayer3.isAlive()).thenReturn(true);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        PlayerList playerList = new PlayerList(players);
+        List<Player> expectedWinners = new ArrayList<>(Arrays.asList(spyPlayer1, spyPlayer3));
+        Assertions.assertEquals(playerList.getAlivePlayers(), expectedWinners);
+    }
+
+    @Test
+    public void testGetWinner() {
+        Player spyPlayer1 = mock(Player.class);
+        Player spyPlayer2 = mock(Player.class);
+        Player spyPlayer3 = mock(Player.class);
+        when(spyPlayer1.getTokens()).thenReturn(5);
+        when(spyPlayer2.getTokens()).thenReturn(5);
+        when(spyPlayer3.getTokens()).thenReturn(4);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(spyPlayer1, spyPlayer2, spyPlayer3));
+        PlayerList playerList = new PlayerList(players);
+        List<Player> expectedWinners = new ArrayList<>(Arrays.asList(spyPlayer1, spyPlayer2));
+        Assertions.assertEquals(playerList.getGameWinner(), expectedWinners);
     }
 
     /**
