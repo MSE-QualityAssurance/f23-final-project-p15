@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class CheckGameEndTest {
+public class GameTest {
 
     private ByteArrayOutputStream outputStream;
 
