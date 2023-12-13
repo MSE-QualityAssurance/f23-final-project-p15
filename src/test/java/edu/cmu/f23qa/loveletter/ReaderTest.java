@@ -1,7 +1,11 @@
 package edu.cmu.f23qa.loveletter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +29,7 @@ public class ReaderTest {
     private ByteArrayOutputStream outputStream;
     private InputStream inputStream;
     private PlayerList players = new PlayerList();
-    private Thread playerInputThread;
+    private Thread inputThread;
 
 
     @BeforeEach
@@ -37,10 +41,6 @@ public class ReaderTest {
         System.setOut(new PrintStream(outputStream));
 
         inputStream = System.in;
-
-        // add u1, u2, u3, u4, u5 to playerList
-        List<String> playerNames = new ArrayList<>(Arrays.asList("u1", "u2", "u3", "u4", "u5"));
-        players.addPlayers(playerNames);
     }
 
     @Test
@@ -202,19 +202,89 @@ public class ReaderTest {
     @Test
     public void testGetPlayerNum1() throws InterruptedException {
         Mockito.when(mockScanner.nextLine()).thenReturn("u1", "");
-        playerInputThread = new Thread(() -> reader.getPlayers(2, 8));
-        playerInputThread.start();
+        inputThread = new Thread(() -> reader.getPlayers(2, 8));
+        inputThread.start();
 
         // Set a timeout (2s) to interrupt the player input thread
         Thread.sleep(2000);
-        playerInputThread.interrupt();
+        inputThread.interrupt();
 
         String consoleOutput = outputStream.toString();
         assertTrue(consoleOutput.contains("There must be at least 2 players, please add more players!"));
     }
 
-    @Test
-    public void testGetOpponent() {
+    @Test  
+    public void testGetOpponentNullNullNull() throws InterruptedException {
+        List<String> playerNames = new ArrayList<>(
+            Arrays.asList("u1", "u2", "u3", "u4", "u5"));
+        players.addPlayers(playerNames);
 
+        Mockito.when(mockScanner.nextLine()).thenReturn("u666");
+        inputThread = new Thread(() -> reader.getOpponent(players, null, null, null));
+        inputThread.start();
+
+        Thread.sleep(2000);
+        inputThread.interrupt();
+
+        String consoleOutput = outputStream.toString();
+        assertTrue(consoleOutput.contains("This player is not in the game"));
     }
+
+    @Test
+    public void testGetOpponentNotNullNullInvalid(){
+        List<String> playerNames = new ArrayList<>(
+            Arrays.asList("u1", "u2", "u3", "u4", "u5"));
+        players.addPlayers(playerNames);
+
+        Player mockSycophantPlayer = Mockito.mock(Player.class);
+
+        // mock that playerWithSycophant is not alive
+        when(mockSycophantPlayer.isAlive()).thenReturn(false);
+        Player opponent = reader.getOpponent(players, mockSycophantPlayer, null, null);
+        assertNull(opponent);
+    }
+
+    @Test
+    public void testGetOpponentNotNullNullValid() {
+        List<String> playerNames = new ArrayList<>(
+            Arrays.asList("u1", "u2", "u3", "u4", "u5"));
+        players.addPlayers(playerNames);
+
+        Player mockPlayerWithSycophant = Mockito.mock(Player.class);
+
+        // mock that playerWithSycophant is alive and unprotected
+        when(mockPlayerWithSycophant.isAlive()).thenReturn(true);
+        when(mockPlayerWithSycophant.isProtected()).thenReturn(false);
+        when(mockPlayerWithSycophant.getName()).thenReturn("u1");
+
+        // user is null, must choose sycophant
+        Player opponent = reader.getOpponent(players, mockPlayerWithSycophant, null, null);
+        assertEquals(mockPlayerWithSycophant, opponent);
+    }
+
+    @Test
+    public void testGetOpponentNullNotNull() throws InterruptedException {
+        List<String> playerNames = new ArrayList<>(
+            Arrays.asList("u1", "u2", "u3", "u4", "u5"));
+        players.addPlayers(playerNames);
+
+        Player mockUser = Mockito.mock(Player.class);
+
+        Mockito.when(mockScanner.nextLine()).thenReturn("u2", "");
+         
+        // mock that playerWithSycophant is alive and unprotected
+        when(mockUser.getName()).thenReturn("u2");
+ 
+        inputThread = new Thread(() -> reader.getOpponent(players, null, mockUser, null));
+        inputThread.start();
+
+        Thread.sleep(2000);
+        inputThread.interrupt();
+
+        String consoleOutput = outputStream.toString();
+        //System.out.println("console output: "+consoleOutput);
+        assertEquals("hahahah", consoleOutput);
+        //assertTrue(consoleOutput.contains("You cannot target yourself"));
+    }
+
 }
