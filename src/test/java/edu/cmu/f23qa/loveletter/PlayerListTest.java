@@ -2,9 +2,7 @@ package edu.cmu.f23qa.loveletter;
 
 import java.util.*;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -78,5 +76,39 @@ public class PlayerListTest {
         // Verify results
         List<Player> winners = playerList.compareUsedPiles(winnersAfterCmpHands);
         assertEquals(winners.size(), 0);
+    }
+
+    /**
+     * Test when valid winner is inputted to the setBeginner()
+     */
+    @Test
+    public void testSetBeginnerWithWinner(){
+        // Create input
+        LinkedList<Player> players = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            players.add(new Player("P"+i));
+        }
+        Player p10 = new Player("P10");
+        players.add(p10);
+        PlayerList playerList = new PlayerList(players);
+
+        // Verify results
+        assertEquals(playerList.currentPlayer, 0);
+        playerList.setBeginner(p10);
+        assertEquals(playerList.currentPlayer, 10);
+    }
+
+    /**
+     * Test when null is inputted to the setBeginner()
+     */
+    @Test
+    public void testSetBeginnerWithNullInput(){
+        // Create input
+        PlayerList playerList = new PlayerList();
+
+        // Verify results
+        assertEquals(playerList.currentPlayer, 0);
+        playerList.setBeginner(null);
+        assertEquals(playerList.currentPlayer, 0);
     }
 }

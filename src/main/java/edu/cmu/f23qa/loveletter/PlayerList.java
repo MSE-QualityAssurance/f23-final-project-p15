@@ -5,7 +5,7 @@ import java.util.*;
 public class PlayerList {
 
     private LinkedList<Player> players;
-    private int currentPlayer = 0;   // the index of the player in the player list
+    public int currentPlayer = 0;   // the index of the player in the player list
     private int tokensToWin = 0;
     private Player playerSetJesterToken = null;
     private Player playerWithJesterToken = null;
@@ -14,6 +14,10 @@ public class PlayerList {
 
     public PlayerList() {
         this.players = new LinkedList<>();
+    }
+
+    public PlayerList(LinkedList<Player> players) {
+        this.players = players;
     }
 
     /**
