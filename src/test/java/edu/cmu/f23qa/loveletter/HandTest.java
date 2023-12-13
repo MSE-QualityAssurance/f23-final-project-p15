@@ -13,23 +13,26 @@ public class HandTest {
         hand = new Hand();
     }
 
+    // Test to verify royaltyPos method returns -1 when there are no royal cards
     @Test
     public void testRoyaltyPosWithNoRoyalCards() {
-        hand.add(Card.GUARD); // Assuming Card.GUARD is not a royal card
-        assertEquals(-1, hand.royaltyPos(), "Should return -1 when no royal cards are present");
+        hand.add(Card.GUARD);
+        assertEquals(-1, hand.royaltyPos());
     }
 
+    // Test to verify royaltyPos method returns correct index with one royal card
     @Test
     public void testRoyaltyPosWithOneRoyalCard() {
-        hand.add(Card.KING); // Assuming Card.KING is a royal card
-        assertEquals(0, hand.royaltyPos(), "Should return the index of the royal card");
+        hand.add(Card.KING);
+        assertEquals(0, hand.royaltyPos());
     }
 
+    // Test to verify royaltyPos method returns index of first royal card among multiple cards
     @Test
     public void testRoyaltyPosWithMultipleCardsIncludingRoyal() {
         hand.add(Card.GUARD);
-        hand.add(Card.PRINCE); // Assuming Card.PRINCE is a royal card
+        hand.add(Card.PRINCE);
         hand.add(Card.GUARD);
-        assertEquals(1, hand.royaltyPos(), "Should return the index of the first royal card");
+        assertEquals(1, hand.royaltyPos());
     }
 }
