@@ -98,4 +98,12 @@ public class Deck {
             return true;
         }
     }
+    /**
+     * Returns the number of cards currently in the deck.
+     *
+     * @return the size of the deck
+     */
+    public int getDeckSize() {
+        return deck.size();
+    }
 }
