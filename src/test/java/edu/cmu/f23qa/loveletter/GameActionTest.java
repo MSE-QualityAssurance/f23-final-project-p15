@@ -91,6 +91,33 @@ public class GameActionTest {
     }
 
     /**
+     * Test for the effects of Guard
+     * The user guesses the opponent's hand card correctly
+     * The opponent has assasin and kills the user
+     */
+    @Test
+    void testGuardWithAssasin() {
+        // Define the behavior of test doubles
+        Hand userHand = new Hand(new ArrayList<>(Arrays.asList(Card.GUARD)));
+        Hand opponentHand = new Hand(new ArrayList<>(Arrays.asList(Card.ASSASIN))); 
+
+        DiscardPile userDiscardPile = Mockito.mock(DiscardPile.class);
+        DiscardPile opponentDiscardPile = Mockito.mock(DiscardPile.class);
+        Player user = new Player("User", userHand, userDiscardPile);
+        Player opponent = new Player("Opponent", opponentHand, opponentDiscardPile);
+        Deck deck = Mockito.mock(Deck.class);
+
+        // Assert revealing card and output
+        GameActions gameActions = new GameActions() {};
+        gameActions.useGuard(6, opponent, user, deck);
+
+        String output = outputStream.toString();
+        assertTrue(output.contains("The opponent held Assasin, you died!"));
+        assertTrue(!user.isAlive());
+    }
+
+
+    /**
      * Test for the effects of Baron
      * The case that the user beats the oponent in card comparison
      */
