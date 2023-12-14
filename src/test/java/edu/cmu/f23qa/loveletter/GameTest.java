@@ -13,7 +13,6 @@ public class GameTest {
 
     private ByteArrayOutputStream outputStream;
 
-    private GameActions gameActions;
     private Hand mockHand1, mockHand2;
     private DiscardPile mockDiscardPile1, mockDiscardPile2;
     private Player player1, player2;
@@ -30,7 +29,6 @@ public class GameTest {
         System.setOut(new PrintStream(outputStream));
 
         // Mock PlayerList and Game
-        gameActions = new GameActions(){};
         mockHand1 = mock(Hand.class);
         mockHand2 = mock(Hand.class);
         mockDiscardPile1 = mock(DiscardPile.class);
@@ -136,5 +134,50 @@ public class GameTest {
         // Assert output
         Card card = game.getCard(user);
         assertEquals(Card.GUARD, card);
+    }
+
+    /**
+     * Test play card for cards need one opponent but no one can be chooson
+     */
+    @Test
+    public void testPlayCardGetNullOpponent() {
+        // Set test doubles
+        Game spyGame = spy(game);
+
+        // Set input
+        Card card = Card.GUARD;
+        Player player = new Player("P");
+
+        // Verify outputs
+        boolean output = game.playCard(card, player);
+        when(spyGame.getOpponentsForTurn(player, card)).thenReturn(null);
+        assertEquals(player.getDiscarded().getCards().get(0), card);
+        assertEquals(output, false);
+    }
+
+    /**
+     * Test play card for each card with sucessfully get opponents
+     */
+    @Test
+    public void testPlayCardWithOpponent() {
+        // Set test doubles
+        Game spyGame = spy(game);
+
+        List<Card> allCards = Arrays.asList(
+            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE,
+            Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP, 
+            Card.SYCOPHANT, Card.CARDINAL, Card.BARONESS,
+            Card.COUNTESS, Card.HANDMAIDEN, Card.ASSASIN, Card.CONSTABLE, Card.COUNT); 
+        List<Player> opponents = new ArrayList<Player>(Arrays.asList(player1, player2));
+
+        for (Card card : allCards) {
+            // Set input
+            Player player = new Player("P");
+            when(spyGame.getOpponentsForTurn(player, card)).thenReturn(opponents);
+            
+            // Verify outputs
+            game.playCard(card, player);
+            assertEquals(player.getDiscarded().getCards().get(0), card);
+        }
     }
 }
