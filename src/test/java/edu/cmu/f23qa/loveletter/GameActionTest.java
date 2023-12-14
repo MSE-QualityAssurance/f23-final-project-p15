@@ -47,7 +47,7 @@ public class GameActionTest {
     }
 
     /**
-     * Test for th effects of Guard
+     * Test for the effects of Guard
      * The user guesses the opponent's hand card correctly
      */
     @Test
@@ -311,7 +311,6 @@ public class GameActionTest {
     /**
      * Test for the Bishop when the user guesses right 
      * and opponent chooses to discard and draw a new card
-     * and there are not enough cards in deck
      */
     @Test
     public void testUserBishopOpponentDraw() {
