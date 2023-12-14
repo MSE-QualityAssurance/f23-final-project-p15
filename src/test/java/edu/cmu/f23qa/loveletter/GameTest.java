@@ -99,17 +99,13 @@ public class GameTest {
      */
     @Test
     public void testCheckForRoundWinnerWithOnePlayerAlive() {
-        // mock player1
-        // mock playerlist --> get alive player return list of players
-        // --> checkWinnerForJester return null
-        // winners assert alive player
-        // Player player1 = new Player("u1", mockHand1, mockDiscardPile1);
-        // Player spyPlayer1 = spy(player1);
+
         Player player1 = Mockito.mock(Player.class);
         LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1));
         PlayerList playerList = Mockito.mock(PlayerList.class);
         Game game = new Game(mockReader, playerList, mockDeck);
 
+        // Define the behavior of test doubles
         when(player1.getTokens()).thenReturn(1);
         when(playerList.getAlivePlayers()).thenReturn(players);
         when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
@@ -117,6 +113,7 @@ public class GameTest {
 
         List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1));
 
+        // Assert revealing card and output
         Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
         Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
         
@@ -131,10 +128,7 @@ public class GameTest {
      */
     @Test
     public void testCheckForRoundWinnerWithOneHighestHand() {
-        // mock p1, p2
-        // mock playerlist
-        // -->get alive players return list of players
-        // -->compare hand return a list of a player
+
         Player player1 = Mockito.mock(Player.class);
         Player player2 = Mockito.mock(Player.class);
         LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1, player2));
@@ -142,6 +136,7 @@ public class GameTest {
         PlayerList playerList = Mockito.mock(PlayerList.class);
         Game game = new Game(mockReader, playerList, mockDeck);
 
+        // Define the behavior of test doubles
         when(playerList.getAlivePlayers()).thenReturn(players);
         when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
         when(playerList.checkPlayerForConstableToken()).thenReturn(null);
@@ -149,6 +144,7 @@ public class GameTest {
 
         List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1));
 
+        // Assert revealing card and output
         Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
         Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
     
@@ -162,12 +158,7 @@ public class GameTest {
      */
     @Test
     public void testCheckForRoundWinnerWithOneHighestDiscardPile() {
-        // mock p1, p2
-        // mock playerlist
-        // -->get alive players return list of players
-        // -->compare hand return a list of a player --2
-        // -->compare used piles -- [p1]
-        // p1.addToken --> getToken=1
+
         Player player1 = Mockito.mock(Player.class);
         Player player2 = Mockito.mock(Player.class);
         LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1, player2));
@@ -176,6 +167,7 @@ public class GameTest {
         PlayerList playerList = Mockito.mock(PlayerList.class);
         Game game = new Game(mockReader, playerList, mockDeck);
 
+        // Define the behavior of test doubles
         when(playerList.getAlivePlayers()).thenReturn(players);
         when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
         when(playerList.checkPlayerForConstableToken()).thenReturn(null);
@@ -184,6 +176,7 @@ public class GameTest {
 
         List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1));
 
+        // Assert revealing card and output
         Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
         Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
     }
@@ -204,6 +197,7 @@ public class GameTest {
         PlayerList playerList = Mockito.mock(PlayerList.class);
         Game game = new Game(mockReader, playerList, mockDeck);
 
+        // Define the behavior of test doubles
         when(playerList.getAlivePlayers()).thenReturn(players);
         when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
         when(playerList.checkPlayerForConstableToken()).thenReturn(null);
@@ -212,6 +206,7 @@ public class GameTest {
 
         List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1, player2));
 
+        // Assert revealing card and output
         Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
         Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
     }
@@ -231,10 +226,12 @@ public class GameTest {
         PlayerList playerList = Mockito.mock(PlayerList.class);
         Game game = new Game(mockReader, playerList, mockDeck);
 
+        // Define the behavior of test doubles
         when(playerList.getAlivePlayers()).thenReturn(players);
         when(playerList.checkWinnerForJesterToken(players)).thenReturn(player2);
         when(playerList.checkPlayerForConstableToken()).thenReturn(player2);
 
+        // Assert revealing card and output
         game.checkForRoundWinner();
         Assertions.assertEquals(player1.getTokens(), 1);
         Assertions.assertEquals(player2.getTokens(), 2);
