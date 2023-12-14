@@ -8,7 +8,7 @@ import java.util.*;
 public class Game extends GameActions {
     private PlayerList players;
     private Deck deck;
-    private Player lastRoundWinner = null;
+    public Player lastRoundWinner = null;
 
     /**
      * The input stream.
@@ -355,7 +355,7 @@ public class Game extends GameActions {
      * 
      * @return the winners of this round
      */
-    private List<Player> checkForRoundWinner() {
+    public List<Player> checkForRoundWinner() {
         List<Player> winners = new ArrayList<Player>();
         List<Player> alivePlayers = players.getAlivePlayers();
 
