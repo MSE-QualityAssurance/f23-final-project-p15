@@ -240,8 +240,9 @@ public class Game extends GameActions {
      *             the played card
      * @param user
      *             the player of the card
+     * @return true if the card take effects
      */
-    private void playCard(Card card, Player user) {
+    public boolean playCard(Card card, Player user) {
         user.getDiscarded().add(card);
 
         List<Card> needOpponent = Arrays.asList(
@@ -257,7 +258,7 @@ public class Game extends GameActions {
             opponents = getOpponentsForTurn(user, card);
             // No one can be chosen, the card loses effects
             if (opponents == null) {
-                return;
+                return false;
             }
             
             opponent = opponents.get(0);
@@ -320,7 +321,9 @@ public class Game extends GameActions {
                 break;
             default:
                 break;
-        }
+            }
+
+        return true;
     }
 
     /**
@@ -331,7 +334,7 @@ public class Game extends GameActions {
      *
      * @return the chosen card
      */
-    private Card getCard(Player user) {
+    public Card getCard(Player user) {
         // Check if the user holds Countess as well as King or Prince
         int royaltyPos = user.getHand().royaltyPos();
         if (royaltyPos != -1) {

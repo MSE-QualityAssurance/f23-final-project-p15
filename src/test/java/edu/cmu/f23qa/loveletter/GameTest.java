@@ -17,7 +17,6 @@ public class GameTest {
 
     private ByteArrayOutputStream outputStream;
 
-    private GameActions gameActions;
     private Hand mockHand1, mockHand2;
     private DiscardPile mockDiscardPile1, mockDiscardPile2;
     private Player player1, player2;
@@ -35,7 +34,6 @@ public class GameTest {
         System.setOut(new PrintStream(outputStream));
 
         // Mock PlayerList and Game
-        gameActions = new GameActions(){};
         mockHand1 = mock(Hand.class);
         mockHand2 = mock(Hand.class);
         mockDiscardPile1 = mock(DiscardPile.class);
@@ -95,6 +93,99 @@ public class GameTest {
         assertFalse(game.checkIfGameEnds(), "Game should not end when there's a tie");
     }
 
+    /**
+     * Test for pick a card from the player's hand to play in this turn
+     * when the player hold the Countess and Price together
+     */
+    @Test
+    public void testGetCardCountessPince() {
+        // Create input
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(Card.COUNTESS, Card.PRINCE)));
+        Player user = new Player("U1", hand, mockDiscardPile1);
+
+        // Assert output
+        Card card = game.getCard(user);
+        assertEquals(Card.COUNTESS, card);
+    }
+
+    /**
+     * Test for pick a card from the player's hand to play in this turn
+     * when the player hold the Countess and King together
+     */
+    @Test
+    public void testGetCardKingCountess() {
+        // Create input
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(Card.KING, Card.COUNTESS)));
+        Player user = new Player("U1", hand, mockDiscardPile1);
+
+        // Assert output
+        Card card = game.getCard(user);
+        assertEquals(Card.COUNTESS, card);
+    }
+
+    /**
+     * Test for pick a card from the player's hand to play in this turn
+     * when the player hold the Countess but not no King or Prince
+     */
+    @Test
+    public void testGetCardCountessOther() {
+        // Create input
+        Hand hand = new Hand(new ArrayList<>(Arrays.asList(Card.GUARD, Card.COUNTESS)));
+        Player user = new Player("U1", hand, mockDiscardPile1);
+
+        // Define mock behavior
+        when(mockReader.getCard()).thenReturn(0);
+
+        // Assert output
+        Card card = game.getCard(user);
+        assertEquals(Card.GUARD, card);
+    }
+
+    /**
+     * Test play card for cards need one opponent but no one can be chooson
+     */
+    @Test
+    public void testPlayCardGetNullOpponent() {
+        // Set test doubles
+        Game spyGame = spy(game);
+
+        // Set input
+        Card card = Card.GUARD;
+        Player player = new Player("P");
+
+        // Verify outputs
+        boolean output = game.playCard(card, player);
+        when(spyGame.getOpponentsForTurn(player, card)).thenReturn(null);
+        assertEquals(player.getDiscarded().getCards().get(0), card);
+        assertEquals(output, false);
+    }
+
+    /**
+     * Test play card for each card with sucessfully get opponents
+     */
+    @Test
+    public void testPlayCardWithOpponent() {
+        // Set test doubles
+        Game spyGame = spy(game);
+
+        List<Card> allCards = Arrays.asList(
+            Card.GUARD, Card.PRIEST, Card.BARON, Card.PRINCE,
+            Card.KING, Card.QUEEN, Card.JESTER, Card.BISHOP, 
+            Card.SYCOPHANT, Card.CARDINAL, Card.BARONESS,
+            Card.COUNTESS, Card.HANDMAIDEN, Card.ASSASIN, Card.CONSTABLE, Card.COUNT); 
+        List<Player> opponents = new ArrayList<Player>(Arrays.asList(player1, player2));
+
+        for (Card card : allCards) {
+            // Set input
+            Player player = new Player("P");
+            when(spyGame.getOpponentsForTurn(player, card)).thenReturn(opponents);
+            
+            // Verify outputs
+            game.playCard(card, player);
+            assertEquals(player.getDiscarded().getCards().get(0), card);
+        }
+    }
+  
     /**
      * Test for checking the round winner.
      * The case that only one player alive.
@@ -476,5 +567,4 @@ public class GameTest {
 
         assertEquals(Arrays.asList(opponent1, opponent2), opponents);
     }
-
 }
