@@ -1,10 +1,8 @@
 package edu.cmu.f23qa.loveletter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -12,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,7 +24,6 @@ public class ReaderTest {
     private Reader reader;
     private Scanner mockScanner;
     private ByteArrayOutputStream outputStream;
-    private InputStream inputStream;
     private PlayerList players = new PlayerList();
     private Thread inputThread;
 
@@ -40,7 +36,6 @@ public class ReaderTest {
         outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
 
-        inputStream = System.in;
     }
 
     // This test case is for the scenario when the number of opponents is valid.
