@@ -4,8 +4,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.*;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -89,4 +92,153 @@ public class GameTest {
 
         assertFalse(game.checkIfGameEnds(), "Game should not end when there's a tie");
     }
+
+    /**
+     * Test for checking the round winner.
+     * The case that only one player alive.
+     */
+    @Test
+    public void testCheckForRoundWinnerWithOnePlayerAlive() {
+        // mock player1
+        // mock playerlist --> get alive player return list of players
+        // --> checkWinnerForJester return null
+        // winners assert alive player
+        // Player player1 = new Player("u1", mockHand1, mockDiscardPile1);
+        // Player spyPlayer1 = spy(player1);
+        Player player1 = Mockito.mock(Player.class);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1));
+        PlayerList playerList = Mockito.mock(PlayerList.class);
+        Game game = new Game(mockReader, playerList, mockDeck);
+
+        when(player1.getTokens()).thenReturn(1);
+        when(playerList.getAlivePlayers()).thenReturn(players);
+        when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
+        when(playerList.checkPlayerForConstableToken()).thenReturn(null);
+
+        List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1));
+
+        Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
+        Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
+        
+
+        
+    }
+
+    /**
+     * Test for checking the round winner.
+     * The case that multiple player alive, and they have different hand card values.
+     * Assume neither winner have Jester token nor any discarded Constable is alive.
+     */
+    @Test
+    public void testCheckForRoundWinnerWithOneHighestHand() {
+        // mock p1, p2
+        // mock playerlist
+        // -->get alive players return list of players
+        // -->compare hand return a list of a player
+        Player player1 = Mockito.mock(Player.class);
+        Player player2 = Mockito.mock(Player.class);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1, player2));
+        LinkedList<Player> winnerPlayers = new LinkedList<>(Arrays.asList(player1));
+        PlayerList playerList = Mockito.mock(PlayerList.class);
+        Game game = new Game(mockReader, playerList, mockDeck);
+
+        when(playerList.getAlivePlayers()).thenReturn(players);
+        when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
+        when(playerList.checkPlayerForConstableToken()).thenReturn(null);
+        when(playerList.compareHand(players)).thenReturn(winnerPlayers);
+
+        List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1));
+
+        Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
+        Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
+    
+    } 
+
+    /**
+     * Test for checking the round winner.
+     * The case that multiple player alive, and they have the same hand card values
+     * and different discard piles value.
+     * Assume neither winner have Jester token nor any discarded Constable is alive.
+     */
+    @Test
+    public void testCheckForRoundWinnerWithOneHighestDiscardPile() {
+        // mock p1, p2
+        // mock playerlist
+        // -->get alive players return list of players
+        // -->compare hand return a list of a player --2
+        // -->compare used piles -- [p1]
+        // p1.addToken --> getToken=1
+        Player player1 = Mockito.mock(Player.class);
+        Player player2 = Mockito.mock(Player.class);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1, player2));
+        LinkedList<Player> winnerPlayers = new LinkedList<>(Arrays.asList(player1, player2));
+        LinkedList<Player> winnerPlayersPile = new LinkedList<>(Arrays.asList(player1));
+        PlayerList playerList = Mockito.mock(PlayerList.class);
+        Game game = new Game(mockReader, playerList, mockDeck);
+
+        when(playerList.getAlivePlayers()).thenReturn(players);
+        when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
+        when(playerList.checkPlayerForConstableToken()).thenReturn(null);
+        when(playerList.compareHand(players)).thenReturn(winnerPlayers);
+        when(playerList.compareUsedPiles(winnerPlayers)).thenReturn(winnerPlayersPile);
+
+        List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1));
+
+        Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
+        Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
+    }
+
+    /**
+     * Test for checking the round winner.
+     * The case that multiple player alive, and they have the same hand card values
+     * and the same discard piles value.
+     * Assume neither winner have Jester token nor any discarded Constable is alive.
+     */
+    @Test
+    public void testCheckForRoundWinnerWithMultipleHighestDiscardPile() {
+        Player player1 = Mockito.mock(Player.class);
+        Player player2 = Mockito.mock(Player.class);
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1, player2));
+        LinkedList<Player> winnerPlayers = new LinkedList<>(Arrays.asList(player1, player2));
+        LinkedList<Player> winnerPlayersPile = new LinkedList<>(Arrays.asList(player1, player2));
+        PlayerList playerList = Mockito.mock(PlayerList.class);
+        Game game = new Game(mockReader, playerList, mockDeck);
+
+        when(playerList.getAlivePlayers()).thenReturn(players);
+        when(playerList.checkWinnerForJesterToken(players)).thenReturn(null);
+        when(playerList.checkPlayerForConstableToken()).thenReturn(null);
+        when(playerList.compareHand(players)).thenReturn(winnerPlayers);
+        when(playerList.compareUsedPiles(winnerPlayers)).thenReturn(winnerPlayersPile);
+
+        List<Player> expectedWinners = new ArrayList<Player>(Arrays.asList(player1, player2));
+
+        Assertions.assertEquals(game.checkForRoundWinner(), expectedWinners);
+        Assertions.assertEquals(game.lastRoundWinner, expectedWinners.get(0));
+    }
+
+    /**
+     * Test for checking the round winner.
+     * The case that one of the winners have Jester token,
+     * and the one who discard counstable is not alive.
+     * Assume only one player is alive.
+     */
+    @Test
+    public void testCheckForRoundWinnerWithJesterAndCounstable() {
+        Player player1 = new Player("u1", mockHand1, mockDiscardPile1);
+        Player player2 = new Player("u2", mockHand1, mockDiscardPile1);
+
+        LinkedList<Player> players = new LinkedList<>(Arrays.asList(player1));
+        PlayerList playerList = Mockito.mock(PlayerList.class);
+        Game game = new Game(mockReader, playerList, mockDeck);
+
+        when(playerList.getAlivePlayers()).thenReturn(players);
+        when(playerList.checkWinnerForJesterToken(players)).thenReturn(player2);
+        when(playerList.checkPlayerForConstableToken()).thenReturn(player2);
+
+        game.checkForRoundWinner();
+        Assertions.assertEquals(player1.getTokens(), 1);
+        Assertions.assertEquals(player2.getTokens(), 2);
+
+    }
+
 }
