@@ -6,6 +6,8 @@ import java.util.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -22,6 +24,7 @@ public class GameTest {
     private PlayerList mockPlayerList;
     private Game game;
     private Deck mockDeck;
+    
 
     @BeforeEach
     public void setUp() {
@@ -89,4 +92,243 @@ public class GameTest {
 
         assertFalse(game.checkIfGameEnds(), "Game should not end when there's a tie");
     }
+
+    /**
+     * Test getOpponentsForTurn, when the card doesn't need opponent
+     * Assasin, Handmaiden, Countess, Constable, Count
+     */
+    @Test
+    public void testGetOpponentsForTurnZeroOpponent() {
+        Player player = new Player("u1");
+        Card card = Card.HANDMAIDEN;
+
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertTrue(opponents == null);
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card needs exactly one opponent
+     * Prince, Sycophant
+     */
+    @Test
+    public void testGetOpponentsForTurnOneOpponentNotEnought() {
+        Player player = new Player("u1");
+        Card card = Card.PRINCE;
+
+        when(mockPlayerList.getNumAvailablePlayers(null)).thenReturn(0);
+
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertTrue(opponents == null);
+        String output = outputStream.toString().trim();
+        assertTrue(output.contains("No enough players can be chosen"));
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card needs exactly one opponent
+     * Prince, Sycophant
+     * But due to the last's turn's effect of sycophant, no oppoenent could be chosen
+     */
+    @Test
+    public void testGetOpponentsForTurnOneOpponentInvalid() {
+        Player player = new Player("u1");
+        Card card = Card.PRINCE;
+
+        when(mockPlayerList.getNumAvailablePlayers(null)).thenReturn(1);
+        when(mockReader.getOpponent(mockPlayerList, null, null, null)).thenReturn(null);
+
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertTrue(opponents == null);
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card needs exactly one opponent
+     * Prince, Sycophant
+     * Successfully one opponent could be chosen
+     */
+    @Test
+    public void testGetOpponentsForTurnOneOpponentValid() {
+        Player player = new Player("u1");
+        Player opponent = new Player("u2");
+        Card card = Card.PRINCE;
+
+        when(mockPlayerList.getNumAvailablePlayers(null)).thenReturn(1);
+        when(mockReader.getOpponent(mockPlayerList, null, null, null)).thenReturn(opponent);
+
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertEquals(opponents, Arrays.asList(opponent));
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card needs exactly one opponent not self
+     * Guard, Priest, Baron, King, Queen, Jester, Bishop
+     */
+    @Test
+    public void testGetOpponentsForTurnOneOpponentNotSelfNotEnought() {
+        Player player = new Player("u1");
+        Card card = Card.BARON;
+
+        when(mockPlayerList.getNumAvailablePlayers(player)).thenReturn(0);
+
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertTrue(opponents == null);
+        String output = outputStream.toString().trim();
+        assertTrue(output.contains("No enough players can be chosen"));
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card needs exactly one opponent not self
+     * Guard, Priest, Baron, King, Queen, Jester, Bishop
+     */
+    @Test
+    public void testGetOpponentsForTurnOneOpponentNotSelfInvalid() {
+        Player player = new Player("u1");
+        Card card = Card.BARON;
+
+        when(mockPlayerList.getNumAvailablePlayers(player)).thenReturn(2);
+        when(mockReader.getOpponent(mockPlayerList, null, player, null)).thenReturn(null);
+
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertTrue(opponents == null);
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card needs exactly one opponent not self
+     * Guard, Priest, Baron, King, Queen, Jester, Bishop
+     */
+    @Test
+    public void testGetOpponentsForTurnOneOpponentNotSelfValid() {
+        Player player = new Player("u1");
+        Player opponent = new Player("u2");
+        Card card = Card.BARON;
+
+        when(mockPlayerList.getNumAvailablePlayers(player)).thenReturn(2);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), player, null)).thenReturn(opponent);
+
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertEquals(Arrays.asList(opponent), opponents);
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card Cardinal needs exactly two opponents
+     * Only Cardinal
+     */
+    @Test
+    public void testGetOpponentsForTurnCardinalNotEnough() {
+        Player player = new Player("u1");
+        Card card = Card.CARDINAL;
+
+        when(mockPlayerList.getNumAvailablePlayers(null)).thenReturn(1);
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+
+        assertTrue(opponents == null);
+        String output = outputStream.toString().trim();
+        assertTrue(output.contains("No enough players can be chosen"));
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card Cardinal needs exactly two opponents
+     * Only Cardinal
+     */
+    @Test
+    public void testGetOpponentsForTurnCardinalInvalid() {
+        Player player = new Player("u1");
+        Card card = Card.CARDINAL;
+
+        when(mockPlayerList.getNumAvailablePlayers(null)).thenReturn(2);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), null, null)).thenReturn(null);
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+
+        assertTrue(opponents == null);
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card Cardinal needs exactly two opponents
+     * Only Cardinal
+     */
+    @Test
+    public void testGetOpponentsForTurnCardinalValid() {
+        Player player = new Player("u1");
+        Card card = Card.CARDINAL;
+        Player opponent1 = new Player("u2");
+        Player opponent2 = new Player("u3");
+
+        when(mockPlayerList.getNumAvailablePlayers(null)).thenReturn(2);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), null, null)).thenReturn(opponent1);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), null, opponent1)).thenReturn(opponent2);
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+
+        assertEquals(Arrays.asList(opponent1, opponent2), opponents);;
+    } 
+
+    /**
+     * Test getOpponentsForTurn, when the card Baroness needs one or two opponents
+     * Only Baroness
+     */
+    @Test
+    public void testGetOpponentsForTurnBaronessNotEnough() {
+        Player player = new Player("u1");
+        Card card = Card.BARONESS;
+
+        when(mockPlayerList.getNumAvailablePlayers(player)).thenReturn(0);
+       
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+        assertNull(opponents);
+        String output = outputStream.toString().trim();
+        assertTrue(output.contains("No enough players can be chosen"));
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card Baroness needs one or two opponents
+     * Only Baroness
+     */
+    @Test
+    public void testGetOpponentsForTurnBaronessOnlyOneInvalid() {
+        Player player = new Player("u1");
+        Card card = Card.BARONESS;
+
+        when(mockPlayerList.getNumAvailablePlayers(player)).thenReturn(1);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), player, null)).thenReturn(null);
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+
+        assertNull(opponents);
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card Baroness needs one or two opponents
+     * Only Baroness
+     */
+    @Test
+    public void testGetOpponentsForTurnBaronessOnlyOneValid() {
+        Player player = new Player("u1");
+        Card card = Card.BARONESS;
+        Player opponent = new Player("u2");
+
+        when(mockPlayerList.getNumAvailablePlayers(player)).thenReturn(1);
+        when(mockReader.getNumOpponents()).thenReturn(1);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), player, null)).thenReturn(opponent);
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+
+        assertEquals(Arrays.asList(opponent), opponents);
+    }
+
+    /**
+     * Test getOpponentsForTurn, when the card Baroness needs one or two opponents
+     * Only Baroness
+     */
+    @Test
+    public void testGetOpponentsForTurnBaronessTwo() {
+        Player player = new Player("u1");
+        Card card = Card.BARONESS;
+        Player opponent1 = new Player("u2");
+        Player opponent2 = new Player("u3");
+
+        when(mockPlayerList.getNumAvailablePlayers(player)).thenReturn(2);
+        when(mockReader.getNumOpponents()).thenReturn(2);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), player, null)).thenReturn(opponent1);
+        when(mockReader.getOpponent(mockPlayerList, mockPlayerList.getPlayerWithSycophant(), player, opponent1)).thenReturn(opponent2);
+        List<Player> opponents = game.getOpponentsForTurn(player, card);
+
+        assertEquals(Arrays.asList(opponent1, opponent2), opponents);
+    }
+
 }

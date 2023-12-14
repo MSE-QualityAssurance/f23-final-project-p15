@@ -135,7 +135,7 @@ public class Game extends GameActions {
         this.deck.removeCards(this.players.getNumPlayers());
     }
 
-    private List<Player> getOpponentsForTurn(Player user, Card card) {
+    public List<Player> getOpponentsForTurn(Player user, Card card) {
         // Get the player with Sycophant token and reset the token
         Player playerWithSycophant = players.getPlayerWithSycophant();
         players.setPlayerWithSycophant(null);    // reset
@@ -185,7 +185,8 @@ public class Game extends GameActions {
                 System.out.println("No enough players can be chosen");
                 return null;
 
-            } else {
+            } 
+            else {
                 opponent1 = in.getOpponent(players, playerWithSycophant, null, null);
                 if (opponent1 == null) {
                     return null;
