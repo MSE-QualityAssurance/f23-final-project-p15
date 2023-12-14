@@ -8,7 +8,7 @@ import java.util.*;
 public class Game extends GameActions {
     private PlayerList players;
     private Deck deck;
-    private Player lastRoundWinner = null;
+    public Player lastRoundWinner = null;
 
     /**
      * The input stream.
@@ -185,7 +185,8 @@ public class Game extends GameActions {
                 System.out.println("No enough players can be chosen");
                 return null;
 
-            } else {
+            } 
+            else {
                 opponent1 = in.getOpponent(players, playerWithSycophant, null, null);
                 if (opponent1 == null) {
                     return null;
@@ -357,7 +358,7 @@ public class Game extends GameActions {
      * 
      * @return the winners of this round
      */
-    private List<Player> checkForRoundWinner() {
+    public List<Player> checkForRoundWinner() {
         List<Player> winners = new ArrayList<Player>();
         List<Player> alivePlayers = players.getAlivePlayers();
 
